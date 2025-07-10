@@ -27,18 +27,17 @@ function LoginForm() {
   const onSubmit = async (data: loginInput) => {
     try {
       const res = await signIn("credentials", {
+        ...data,
         redirect: false,
-        email: data.email,
-        password: data.password,
       });
 
-      if (res?.error) {
-        toast.error("Invalid email or password");
+      if (!res?.ok) {
+        toast.error("Check your email or password");
         return;
       }
 
       toast.success("User logged in successfully");
-      router.push("/")
+      router.push("/");
     } catch (error) {
       throw error;
     }

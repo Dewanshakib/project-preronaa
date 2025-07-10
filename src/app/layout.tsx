@@ -2,8 +2,8 @@ import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/common/navbar";
-import { Toaster } from "@/components/ui/sonner";
 import SessionWrapper from "@/components/auth/session-provider";
+import { Toaster } from "@/components/ui/sonner";
 
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
   description: "Pinterest clone app",
 };
 
-export default function RootLayout({
+export default async function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
@@ -27,10 +27,9 @@ export default function RootLayout({
           <header className="sticky top-0">
             <Navbar />
           </header>
-          <main>
-            {children}
-            <Toaster />
-          </main>
+
+          {children}
+          <Toaster />
         </SessionWrapper>
       </body>
     </html>

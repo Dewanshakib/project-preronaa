@@ -3,7 +3,7 @@ import React from 'react'
 
 export default function Login() {
   return (
-    <div className='w-full h-screen grid place-items-center'>
+    <div className='w-full h-[90vh] grid place-items-center'>
       <LoginForm/>
     </div>
   )

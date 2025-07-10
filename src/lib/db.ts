@@ -14,26 +14,24 @@ if (!cached) {
 
 export async function connectToDatabase() {
 
-    // if cached
-    if (cached.conn) {
-        return cached.conn
-    }
-
-    // promise on the way 
-    if (!cached.promise) {
-        // promise options
-        const Opts = {
-            bufferCommands: false,
-            maxPoolSize: 10,
-            dbName: "Pinterest"
+    try {
+        if (cached.conn) {
+            return cached.conn
         }
 
-        // create promise
-        cached.promise = mongoose.connect(MONGODB_URI, Opts)
+        if (!cached.promise) {
+            const Opts = {
+                bufferCommands: false,
+                maxPoolSize: 10,
+                dbName: "Pinterest"
+            }
 
-        return cached.promise
+            cached.promise = mongoose.connect(MONGODB_URI, Opts)
+        }
+
+        cached.conn = await cached.promise
+        return cached.conn
+    } catch (error) {
+        throw error
     }
-
-    cached.conn = await cached.promise
-    return cached.conn;
 }

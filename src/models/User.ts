@@ -17,12 +17,12 @@ const UserSchema = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     avater: { type: String, required: false },
-    resetToken: { type: String, required: false },
-    resetTokenExpiry: { type: Date, required: false },
+    resetToken: { type: String },
+    resetTokenExpiry: { type: Date },
     follower: { type: Array, default: [], required: false },
     following: { type: Array, default: [], required: false },
     bookmarks: { type: Array, default: [], required: false }
-})
+}, { timestamps: true })
 
 const User = models.User || model<IUser>("User", UserSchema)
 export default User

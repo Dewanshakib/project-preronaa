@@ -1,3 +1,4 @@
+import { connectToDatabase } from '@/lib/db';
 import { NextAuthOptions } from "next-auth";
 import Credentials from "next-auth/providers/credentials";
 import { loginSchema } from "./schema";
@@ -13,22 +14,30 @@ export const authOptions: NextAuthOptions = {
                 email: { type: "email", label: "Email", placeholder: "dewanshakib@gmail.com" },
                 password: { type: "password", label: "Password", placeholder: "************" },
             },
-            async authorize(credentials, req) {
+            async authorize(credentials) {
+
 
                 const parsed = loginSchema.safeParse(credentials)
-                if (!parsed.success) throw Error("Invalid Email or Password")
+                if (!parsed.success) {
+                    throw new Error("Invalid Email or Password")
+                }
+                await connectToDatabase()
 
                 const user = await User.findOne({ email: parsed.data.email })
-                if (!user) throw new Error("User not found")
+                if (!user) {
+                    throw new Error("User not found")
+                }
 
                 const isMatched = await bcrypt.compare(parsed.data.password, user.password)
-                if (!isMatched) throw new Error("Invalid Credentials")
+                if (!isMatched) {
+                    throw new Error("Invalid Credentials")
+                }
 
                 return {
                     id: user._id.toString(),
                     username: user.username,
                     email: user.email,
-                    avater: user.avater,
+                    avater: user.avater || null,
                 }
 
             },

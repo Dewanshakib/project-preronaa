@@ -14,3 +14,22 @@ export const loginSchema = z.object({
 })
 
 export type loginInput = z.infer<typeof loginSchema>
+
+export const forgetPasswordSchema = z.object({
+    email: z.string().email({ message: "Invalid Email" }),
+})
+
+export type forgetPasswordInput = z.infer<typeof forgetPasswordSchema>
+
+export const resetPasswordSchema = z.object({
+    password: z.string().min(8, { message: "Password must be at least 8 characters long" }),
+})
+
+export type resetPasswordInput = z.infer<typeof resetPasswordSchema>
+
+
+export const forgetPasswordTokenSchema = z.object({
+    token: z.string().min(24, { message: "Invalid token" })
+})
+
+export type forgetPasswordTokenInput = z.infer<typeof forgetPasswordTokenSchema>

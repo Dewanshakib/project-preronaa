@@ -27,18 +27,18 @@ function Navbar() {
         </Link>
 
         {/* navlinks */}
-        <div className="flex items-center gap-3">
+        <div className="flex items-center gap-2">
           {session && session.user ? (
             <>
               <Button variant={"link"}>
-                <Link href={"/profile/:id"}>
+                <Link href={`/profile/${session.user.id}`}>
                   <CircleUser className="size-7" />
                 </Link>
               </Button>
               <Button>
                 <Link className="flex items-center gap-1" href={"/create"}>
-                  <p className="font-bold ">Create</p>{" "}
-                  <CirclePlus className="size-4" />
+                  <p className="font-bold hidden md:block">Create</p>{" "}
+                  <CirclePlus className="md:size-4 size-5" />
                 </Link>
               </Button>
               <form action={async () => await signOut()}>
