@@ -5,7 +5,7 @@ import Image from "next/image";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import logo from "@/assets/p_logo.png";
+import logo from "@/assets/preronaa_logo.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { resetPasswordInput, resetPasswordSchema } from "@/lib/schema";
@@ -103,7 +103,7 @@ function ResetPasswordForm() {
               disabled={isSubmitting}
               className="w-full mt-2"
             >
-              Update
+              {isSubmitting ? "Pending..." : "Update"}
             </Button>
           </div>
         </form>

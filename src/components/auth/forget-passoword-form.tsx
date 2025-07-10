@@ -3,7 +3,7 @@
 import React from "react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import Image from "next/image";
-import logo from "@/assets/p_logo.png";
+import logo from "@/assets/preronaa_logo.png";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
@@ -56,7 +56,7 @@ function ForgetPasswordForm() {
             src={logo}
             priority
             className="object-contain"
-            alt="pinterest logo"
+            alt="preronaa logo"
             fill
             sizes="max-w-[120px]"
           />
@@ -87,7 +87,7 @@ function ForgetPasswordForm() {
               disabled={isSubmitting}
               className="w-full mt-2"
             >
-              Send link
+              {isSubmitting ? "Pending..." : "Send link"}
             </Button>
           </div>
         </form>

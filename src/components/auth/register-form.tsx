@@ -5,7 +5,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Image from "next/image";
-import logo from "@/assets/p_logo.png";
+import logo from "@/assets/preronaa_logo.png";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { registerInput, registerSchema } from "@/lib/schema";
@@ -54,13 +54,13 @@ function RegisterForm() {
             src={logo}
             priority
             className="object-contain"
-            alt="pinterest logo"
+            alt="preronaa logo"
             fill
             sizes="max-w-[120px]"
           />
         </div>
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Welcome to Pinterest</h1>
+          <h1 className="text-2xl font-bold">Welcome to Preronaa</h1>
           <p className="text-sm font-medium text-black/80">
             To view more please register
           </p>
@@ -113,7 +113,7 @@ function RegisterForm() {
             type="submit"
             className="w-full font-semibold"
           >
-            Register
+            {isSubmitting ? "Pending..." : "Register"}
           </Button>
         </form>
       </CardContent>

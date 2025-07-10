@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import logo from "@/assets/p_logo.png";
+import logo from "@/assets/preronaa_logo.png";
 import Link from "next/link";
 import Image from "next/image";
 import { CirclePlus, CircleUser } from "lucide-react";
@@ -15,15 +15,16 @@ function Navbar() {
     <div>
       <div className="flex items-center justify-between py-2">
         {/* Logo */}
-        <Link className="flex items-center gap-1" href={"/"}>
+        <Link className="flex items-center gap-2" href={"/"}>
           <Image
             src={logo}
-            alt="pinterest logo"
+            alt="preronaa logo"
             priority
-            width={40}
-            height={40}
+            width={24}
+            height={24}
           />
-          <h1 className="font-bold text-2xl">Pinterest</h1>
+
+          <h1 className="font-bold text-2xl">Preronaa</h1>
         </Link>
 
         {/* navlinks */}

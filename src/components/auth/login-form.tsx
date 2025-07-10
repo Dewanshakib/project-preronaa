@@ -5,7 +5,7 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import Image from "next/image";
-import logo from "@/assets/p_logo.png";
+import logo from "@/assets/preronaa_logo.png";
 import Link from "next/link";
 import { useForm } from "react-hook-form";
 import { loginInput, loginSchema } from "@/lib/schema";
@@ -57,7 +57,7 @@ function LoginForm() {
           />
         </div>
         <div className="text-center">
-          <h1 className="text-2xl font-bold">Welcome to Pinterest</h1>
+          <h1 className="text-2xl font-bold">Welcome to Preronaa</h1>
           <p className="text-sm font-medium text-black/80">
             To view more please login
           </p>
@@ -105,7 +105,7 @@ function LoginForm() {
             type="submit"
             className="w-full font-semibold mt-2"
           >
-            Login
+            {isSubmitting ? "Pending..." : "Login"}
           </Button>
         </form>
       </CardContent>
