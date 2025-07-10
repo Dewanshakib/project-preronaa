@@ -19,7 +19,7 @@ export const authOptions: NextAuthOptions = {
 
                 const parsed = loginSchema.safeParse(credentials)
                 if (!parsed.success) {
-                    throw new Error("Invalid Email or Password")
+                    throw new Error("Check your email or password")
                 }
                 await connectToDatabase()
 

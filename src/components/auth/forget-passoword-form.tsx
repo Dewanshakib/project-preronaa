@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Card, CardContent, CardHeader } from "../ui/card";
 import Image from "next/image";
 import logo from "@/assets/p_logo.png";
@@ -13,17 +13,18 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { forgetPasswordInput, forgetPasswordSchema } from "@/lib/schema";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
 function ForgetPasswordForm() {
-  const [msg, setMsg] = useState<string | undefined>(undefined);
-
   const {
     register,
     handleSubmit,
     formState: { errors, isSubmitting },
-  } = useForm({
+  } = useForm<forgetPasswordInput>({
     resolver: zodResolver(forgetPasswordSchema),
   });
+
+  const router = useRouter();
 
   const onSubmit = async (data: forgetPasswordInput) => {
     try {
@@ -40,7 +41,8 @@ function ForgetPasswordForm() {
         toast.error(result.error);
         return;
       }
-      setMsg("Please check your email and now you can close this tab");
+      toast.success(result.message);
+      router.push("/reset-password");
     } catch (error) {
       throw error;
     }
@@ -87,12 +89,6 @@ function ForgetPasswordForm() {
             >
               Send link
             </Button>
-            {/* check your mail text */}
-            {msg && (
-              <div className="text-xs text-red-400 font-medium inline-flex justify-center w-full my-1">
-                {msg}
-              </div>
-            )}
           </div>
         </form>
         <Button variant={"outline"} className="mt-3">

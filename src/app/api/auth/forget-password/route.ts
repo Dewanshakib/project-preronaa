@@ -28,16 +28,14 @@ export async function POST(request: NextRequest) {
 
         const resetToken = crypto.randomBytes(12).toString("hex") // token
         const resetTokenExpiry = new Date(Date.now() + 10 * 60 * 1000) // 10 min
-        const resetLink = `${process.env.NEXTAUTH_URL}/reset-password/${resetToken}`
 
         user.resetToken = resetToken
         user.resetTokenExpiry = resetTokenExpiry
         await user.save()
 
-        await sendEmail(data.email, resetLink)
-        // console.log(resetLink)
+        await sendEmail(data.email, resetToken)
 
-        return NextResponse.json({ status: 200 })
+        return NextResponse.json({ message: "Please check your email" }, { status: 200 })
     } catch (error: any) {
         return NextResponse.json({ error: error.error }, { status: 200 })
     }

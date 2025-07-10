@@ -6,60 +6,33 @@ import bcrypt from "bcryptjs";
 import { connectToDatabase } from "@/lib/db";
 
 export async function POST(request: NextRequest) {
-    try {
-        const body = await request.json();
+    const body = await request.json()
 
+    const parsed = resetPasswordSchema.safeParse(body)
 
-        const parsed = resetPasswordSchema.safeParse(body);
-
-        if (!parsed.success) {
-            return NextResponse.json(
-                { error: parsed.error.flatten().fieldErrors },
-                { status: 400 }
-            );
-        }
-
-        const { token, password } = parsed.data;
-        console.log(token)
-
-
-        await connectToDatabase();
-
-
-        const user = (await User.findOne({
-            resetToken: token,
-            resetTokenExpiry: { $gt: new Date() },
-        })) as IUser
-
-        if (!user) {
-            return NextResponse.json(
-                { error: "Invalid or expired token" },
-                { status: 400 }
-            );
-        }
-
-
-        const hashedNewPassword = await bcrypt.hash(password, 10);
-
-
-        user.resetToken = undefined;
-        user.resetTokenExpiry = undefined;
-
-        user.password = hashedNewPassword;
-
-
-        await user.save();
-
-        return NextResponse.json(
-            { message: "Password updated successfully" },
-            { status: 200 }
-        );
-    } catch (error: any) {
-        return NextResponse.json(
-            {
-                error: error.error,
-            },
-            { status: 500 }
-        );
+    if (!parsed.success) {
+        return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 })
     }
+
+    const data = parsed.data
+
+    await connectToDatabase()
+
+    const user = await User.findOne({
+        resetToken: data.token,
+        resetTokenExpiry: { $gt: new Date() }
+    }) as IUser
+
+    if (!user) {
+        return NextResponse.json({ error: "Invalid or expired token" }, { status: 400 })
+    }
+
+    const hashedPassword = await bcrypt.hash(data.password, 10)
+    user.password = hashedPassword
+    user.resetToken = undefined
+    user.resetTokenExpiry = undefined
+
+    await user.save()
+
+    return NextResponse.json({ message: "Password updated successfully" }, { status: 200 })
 }

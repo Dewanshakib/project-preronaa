@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
         return NextResponse.json({ error: "Email already registerd" }, { status: 400 })
     }
 
-    const hashedPassword = await bcrypt.hash(data.password, 16)
+    const hashedPassword = await bcrypt.hash(data.password, 10)
 
     await User.create({
         email: data.email,

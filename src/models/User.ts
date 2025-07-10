@@ -17,8 +17,8 @@ const UserSchema = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     avater: { type: String, required: false },
-    resetToken: { type: String },
-    resetTokenExpiry: { type: Date },
+    resetToken: { type: String, required: false },
+    resetTokenExpiry: { type: Date, required: false },
     follower: { type: Array, default: [], required: false },
     following: { type: Array, default: [], required: false },
     bookmarks: { type: Array, default: [], required: false }

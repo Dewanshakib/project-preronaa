@@ -5,8 +5,6 @@ import Image from "next/image";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
-import Link from "next/link";
-import { ChevronLeftIcon } from "lucide-react";
 import logo from "@/assets/p_logo.png";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -27,7 +25,7 @@ function ResetPasswordForm() {
 
   const onSubmit = async (data: resetPasswordInput) => {
     try {
-      const res = await fetch("/api/reset-password", {
+      const res = await fetch("/api/auth/reset-password", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -64,24 +62,42 @@ function ResetPasswordForm() {
         <div className="text-center">
           <h1 className="text-2xl font-bold">Reset password</h1>
           <p className="text-sm font-medium text-black/80 mt-1">
-            Please kindly set your new password
+            Please put the token from your email & set your new password
           </p>
         </div>
       </CardHeader>
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="mt-2">
-            <Label>New password</Label>
-            <Input
-              {...register("password")}
-              placeholder="*************"
-              className="w-full mt-2"
-            />
-            {errors.password && (
-              <span className="text-red-500 mt-1 font-medium text-sm">
-                {errors.password.message}
-              </span>
-            )}
+            <div className="mb-3">
+              <Label>Enter token</Label>
+              <Input
+                {...register("token")}
+                placeholder="*************"
+                className="w-full mt-2"
+                type="password"
+              />
+              {errors.token && (
+                <span className="text-red-500 mt-1 font-medium text-sm">
+                  {errors.token.message}
+                </span>
+              )}
+            </div>
+            <div className="mb-3">
+              <Label>New password</Label>
+              <Input
+                {...register("password")}
+                placeholder="*************"
+                className="w-full mt-2"
+                type="password"
+              />
+              {errors.password && (
+                <span className="text-red-500 mt-1 font-medium text-sm">
+                  {errors.password.message}
+                </span>
+              )}
+            </div>
+
             <Button
               type="submit"
               disabled={isSubmitting}
@@ -91,11 +107,6 @@ function ResetPasswordForm() {
             </Button>
           </div>
         </form>
-        <Button variant={"outline"} className="mt-3">
-          <Link className="flex items-center gap-2" href={"/login"}>
-            <ChevronLeftIcon /> Back to Login
-          </Link>
-        </Button>
       </CardContent>
     </Card>
   );
