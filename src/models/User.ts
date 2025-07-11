@@ -7,9 +7,10 @@ export interface IUser extends Document {
     avater?: string;
     resetToken?: string;
     resetTokenExpiry?: Date;
-    follower?: [],
-    following?: [],
-    bookmarks?: []
+    bio?: string;
+    follower?: Array<string>,
+    following?: Array<string>,
+    bookmarks?: Array<string>
 }
 
 const UserSchema = new Schema<IUser>({
@@ -17,10 +18,11 @@ const UserSchema = new Schema<IUser>({
     email: { type: String, required: true, unique: true },
     password: { type: String, required: true },
     avater: { type: String, required: false },
+    bio: { type: String, required: false },
     resetToken: { type: String, required: false },
     resetTokenExpiry: { type: Date, required: false },
-    follower: { type: Array, default: [], required: false },
-    following: { type: Array, default: [], required: false },
+    follower: { type: Array, required: false },
+    following: { type: Array, required: false },
     bookmarks: { type: Array, default: [], required: false }
 }, { timestamps: true })
 

@@ -57,7 +57,7 @@ function EditProfileForm({ userId }: { userId: string }) {
     <Card className="max-w-2xl w-full mx-auto mt-10">
       <CardHeader>
         {/* back button */}
-        <Link href={`/profile/${userId}`}>
+        <Link href={`/profile`}>
           <Button
             variant="outline"
             className="w-fit inline-flex gap-2 items-center"

@@ -32,7 +32,7 @@ function Navbar() {
           {session && session.user ? (
             <>
               <Button variant={"link"}>
-                <Link href={`/profile/${session.user.id}`}>
+                <Link href={`/profile`}>
                   <CircleUser className="size-7" />
                 </Link>
               </Button>

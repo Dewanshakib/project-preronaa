@@ -38,6 +38,9 @@ export const authOptions: NextAuthOptions = {
                     username: user.username,
                     email: user.email,
                     avater: user.avater || null,
+                    bio: user.bio || null,
+                    follower: user.follower,
+                    following: user.following,
                 }
 
             },
@@ -58,6 +61,9 @@ export const authOptions: NextAuthOptions = {
                 token.id = user.id
                 token.username = user.username
                 token.picture = user.avater
+                token.bio = user.bio
+                token.follower = user.follower as []
+                token.following = user.following as []
             }
             return token
         },
@@ -65,7 +71,10 @@ export const authOptions: NextAuthOptions = {
             if (token) {
                 session.user.id = token.id as string
                 session.user.name = token.username as string
-                session.user.image = token.picture
+                session.user.image = token.picture as string
+                session.user.bio = token.bio as string
+                session.user.follower = token.follower as []
+                session.user.following = token.following as []
             }
             return session
         }

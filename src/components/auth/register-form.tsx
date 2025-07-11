@@ -101,6 +101,7 @@ function RegisterForm() {
               {...register("password")}
               className="w-full mt-1"
               placeholder="*************"
+              type="password"
             />
             {errors.password && (
               <span className="text-red-500 mt-1 font-medium text-sm">
