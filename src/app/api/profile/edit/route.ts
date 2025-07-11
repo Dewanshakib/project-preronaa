@@ -5,7 +5,7 @@ import User from "@/models/User";
 
 
 export async function POST(request:NextRequest) {
-    const body = await request.json()
-    console.log(body)
+    // const body = await formData
+    // console.log(body)
     // return NextResponse.json("Ok")
 }
