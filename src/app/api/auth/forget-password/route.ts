@@ -26,7 +26,7 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: "No user found with this email" }, { status: 400 })
         }
 
-        const resetToken = crypto.randomBytes(12).toString("hex") // token
+        const resetToken = crypto.randomBytes(24).toString("hex") // token
         const resetTokenExpiry = new Date(Date.now() + 10 * 60 * 1000) // 10 min
 
         user.resetToken = resetToken
