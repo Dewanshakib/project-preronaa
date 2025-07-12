@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
@@ -9,48 +9,52 @@ import { Label } from "../ui/label";
 import { Input } from "../ui/input";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { ISession } from "@/types/types";
+import { useForm } from "react-hook-form";
+import { editProfileInput, editProfileSchema } from "@/lib/schema";
+import { zodResolver } from "@hookform/resolvers/zod";
 
-function EditProfileForm({ userId }: { userId: string }) {
+function EditProfileForm({ userDetails }: { userDetails: ISession }) {
   const [file, setFile] = useState<File | undefined>(undefined);
-  const [pending, setPending] = useState(false);
   const router = useRouter();
 
+  const {
+    register,
+    handleSubmit,
+    formState: { errors, isSubmitting },
+  } = useForm<editProfileInput>({
+    resolver: zodResolver(editProfileSchema),
+    defaultValues: {
+      username: userDetails.name,
+      email: userDetails.email,
+      bio: userDetails.bio || "",
+    },
+  });
+
   // console.log(file)
-  const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    setPending(true);
-    try {
-      const formData = new FormData(e.currentTarget);
-      const username = formData.get("username") as string;
-      const email = formData.get("email") as string;
-      const bio = formData.get("bio") as string;
+  const onSubmit = async (data: editProfileInput) => {
+    const formData = new FormData();
 
-      formData.set("userId", userId);
-      formData.set("username", username);
-      formData.set("email", email);
-      formData.set("bio", bio);
-      formData.set("file", file as File);
+    formData.append("userId", userDetails.id);
+    formData.append("username", data.username);
+    formData.append("email", data.email);
+    formData.append("bio", data.bio);
+    formData.append("file", file as File);
 
-      const res = await fetch("/api/profile/edit", {
-        method: "POST",
-        body: formData,
-      });
+    const res = await fetch("/api/profile/edit", {
+      method: "POST",
+      body: formData,
+    });
 
-      const data = await res?.json();
-      if (!res?.ok) {
-        toast.error(data.error);
-        return;
-      }
-      toast.success(data.message);
-      setTimeout(() => {
-        router.push(`/profile/${userId}`);
-      }, 1000);
-    } catch (error) {
-      toast.error("Something went wrong!");
-      console.error(error);
-    } finally {
-      setPending(false);
+    const result = await res?.json();
+    if (!res?.ok) {
+      toast.error(result.error);
+      return;
     }
+    toast.success(result.message);
+    setTimeout(() => {
+      router.push(`/profile`);
+    }, 1000);
   };
 
   return (
@@ -78,36 +82,52 @@ function EditProfileForm({ userId }: { userId: string }) {
 
         {/* profile user info section */}
         <div className="mt-8 w-full max-w-md">
-          <form onSubmit={onSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full mb-3">
               <Label htmlFor="username">Username</Label>
               <Input
+                {...register("username")}
                 className=" w-full mt-1.5"
-                defaultValue={"Default value of username"}
                 name="username"
                 type="text"
               />
+              {errors.username && (
+                <span className="text-red-500 mt-1 font-medium text-sm">
+                  {errors.username.message}
+                </span>
+              )}
             </div>
             <div className="w-full mb-3">
               <Label htmlFor="email">Email</Label>
               <Input
+                {...register("email")}
                 className=" w-full mt-1.5"
-                defaultValue={"Default value of email"}
                 name="email"
                 type="email"
               />
+              {errors.email && (
+                <span className="text-red-500 mt-1 font-medium text-sm">
+                  {errors.email.message}
+                </span>
+              )}
             </div>
             <div className="w-full mb-3">
               <Label htmlFor="bio">Bio</Label>
               <Input
+                {...register("bio")}
                 className=" w-full mt-1.5"
-                defaultValue={"Default value of bio"}
                 name="bio"
-                type="bio"
+                type="text"
+                placeholder="Add your bio"
               />
+              {errors.bio && (
+                <span className="text-red-500 mt-1 font-medium text-sm">
+                  {errors.bio.message}
+                </span>
+              )}
             </div>
-            <Button disabled={pending} type="submit" className="w-full ">
-              {pending ? "Saving..." : "Save"}
+            <Button disabled={isSubmitting} type="submit" className="w-full ">
+              {isSubmitting ? "Saving..." : "Save"}
             </Button>
           </form>
         </div>
@@ -117,4 +137,3 @@ function EditProfileForm({ userId }: { userId: string }) {
 }
 
 export default EditProfileForm;
-

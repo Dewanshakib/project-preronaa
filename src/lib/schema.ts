@@ -27,3 +27,11 @@ export const resetPasswordSchema = z.object({
 })
 
 export type resetPasswordInput = z.infer<typeof resetPasswordSchema>
+
+export const editProfileSchema = z.object({
+    username: z.string().min(5, { message: "New username must be at least 5 characters long" }),
+    email: z.string().email({ message: "Invalid Email" }),
+    bio: z.string().max(100, { message: "Make your bio under 100 characters" })
+})
+
+export type editProfileInput = z.infer<typeof editProfileSchema>

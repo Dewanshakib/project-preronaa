@@ -8,4 +8,15 @@ declare global {
     }
 }
 
-export {}
+export { }
+
+
+export interface ISession {
+    name: string,
+    email: string,
+    image: string | null,
+    id: string,
+    bio: string | null,
+    follower: [],
+    following: []
+}

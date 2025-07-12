@@ -64,7 +64,7 @@ function ForgetPasswordForm() {
         <div className="text-center">
           <h1 className="text-2xl font-bold">Forgot your password</h1>
           <p className="text-sm font-medium text-black/80 mt-1">
-            Enter your email so that we can send you password reset link
+            Enter your email so that we can send you password reset token
           </p>
         </div>
       </CardHeader>
@@ -87,7 +87,7 @@ function ForgetPasswordForm() {
               disabled={isSubmitting}
               className="w-full mt-2"
             >
-              {isSubmitting ? "Pending..." : "Send link"}
+              {isSubmitting ? "Sending..." : "Send token"}
             </Button>
           </div>
         </form>

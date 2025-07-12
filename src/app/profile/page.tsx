@@ -44,7 +44,7 @@ export default async function Profile() {
               className="flex items-center gap-1.5"
               href={"/profile/edit"}
             >
-              Edit Profile <SquarePen />{" "}
+              Edit Profile <SquarePen />
             </Link>
           </Button>
         </div>

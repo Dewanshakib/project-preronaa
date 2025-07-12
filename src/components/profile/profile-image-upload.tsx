@@ -3,6 +3,7 @@ import React, {
   ChangeEvent,
   Dispatch,
   SetStateAction,
+  useEffect,
   useRef,
   useState,
 } from "react";
@@ -22,11 +23,20 @@ function ProfileImageUpload({
   const handleFileChange = (e: ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (file) {
-      const url = URL.createObjectURL(file);
+      if (imgUrl) {
+        URL.revokeObjectURL(imgUrl); // Clean old preview blob to clean the junk in ram
+      }
+      const url = URL.createObjectURL(file); 
       setImgUrl(url);
-      setFile(file)
+      setFile(file);
     }
   };
+
+  useEffect(() => {
+    return () => {
+      if (imgUrl) URL.revokeObjectURL(imgUrl);
+    };
+  }, [imgUrl]);
 
   return (
     <div className="flex md:flex-row flex-col items-center md:gap-5 gap-6">
@@ -50,6 +60,7 @@ function ProfileImageUpload({
           onChange={handleFileChange}
           type="file"
           ref={imageRef}
+          accept="image/*"
           className="hidden"
         />
         <Button variant={"outline"} onClick={() => imageRef.current?.click()}>
@@ -61,4 +72,3 @@ function ProfileImageUpload({
 }
 
 export default ProfileImageUpload;
-
