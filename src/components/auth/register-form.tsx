@@ -1,5 +1,5 @@
 "use client";
-import React from "react";
+import React, { ChangeEvent, useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -12,6 +12,7 @@ import { registerInput, registerSchema } from "@/lib/schema";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 function RegisterForm() {
   const {
@@ -21,6 +22,11 @@ function RegisterForm() {
   } = useForm<registerInput>({
     resolver: zodResolver(registerSchema),
   });
+
+  const [eyeOpen, setEyeOpen] = useState(false);
+  const handleEyeOpen = () => {
+    setEyeOpen(!eyeOpen);
+  };
 
   const router = useRouter();
 
@@ -70,11 +76,24 @@ function RegisterForm() {
       <CardContent>
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="w-full mb-4">
+            <Label>Name</Label>
+            <Input
+              {...register("name")}
+              className="w-full mt-1"
+              placeholder="Dewan Shakib"
+            />
+            {errors.name && (
+              <span className="text-red-500 mt-1 font-medium text-sm">
+                {errors.name.message}
+              </span>
+            )}
+          </div>
+          <div className="w-full mb-4">
             <Label>Username</Label>
             <Input
               {...register("username")}
               className="w-full mt-1"
-              placeholder="Dewan Shakib"
+              placeholder="dewan_op"
             />
             {errors.username && (
               <span className="text-red-500 mt-1 font-medium text-sm">
@@ -95,14 +114,28 @@ function RegisterForm() {
               </span>
             )}
           </div>
-          <div className="w-full mb-4">
+          <div className="w-full mb-4 relative">
             <Label>Password</Label>
             <Input
               {...register("password")}
               className="w-full mt-1"
               placeholder="*************"
-              type="password"
+              type={eyeOpen ? "text" : "password"}
             />
+            {
+              <Button
+                type="button"
+                className="absolute top-4.5 right-0"
+                variant={"outline"}
+                onClick={handleEyeOpen}
+              >
+                {eyeOpen ? (
+                  <EyeIcon className="size-4.5" />
+                ) : (
+                  <EyeOffIcon className="size-4.5" />
+                )}
+              </Button>
+            }
             {errors.password && (
               <span className="text-red-500 mt-1 font-medium text-sm">
                 {errors.password.message}

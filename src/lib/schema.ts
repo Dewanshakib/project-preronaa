@@ -1,7 +1,8 @@
 import * as z from "zod/v4"
 
 export const registerSchema = z.object({
-    username: z.string().min(5, { message: "Username must be at least 5 characters long" }),
+    name: z.string().min(5, { message: "Name must be at least 5 characters long" }),
+    username: z.string().min(5, { message: "Username also have be at least 5 characters long" }),
     email: z.string().email({ message: "Invalid Email" }),
     password: z.string().min(8, { message: "Password must be at least 8 characters long" })
 })
@@ -29,9 +30,8 @@ export const resetPasswordSchema = z.object({
 export type resetPasswordInput = z.infer<typeof resetPasswordSchema>
 
 export const editProfileSchema = z.object({
-    username: z.string().min(5, { message: "New username must be at least 5 characters long" }),
-    email: z.string().email({ message: "Invalid Email" }),
-    bio: z.string().max(100, { message: "Make your bio under 100 characters" })
+    name: z.string().min(5, { message: "Name must be at least 5 characters long" }),
+    bio: z.string().max(100, { message: "Bio must be under 100 characters" }).optional(),
 })
 
 export type editProfileInput = z.infer<typeof editProfileSchema>

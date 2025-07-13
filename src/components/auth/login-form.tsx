@@ -13,6 +13,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { signIn } from "next-auth/react";
 import { toast } from "sonner";
+import { EyeIcon, EyeOffIcon } from "lucide-react";
 
 function LoginForm() {
   const router = useRouter();
@@ -23,6 +24,11 @@ function LoginForm() {
   } = useForm<loginInput>({
     resolver: zodResolver(loginSchema),
   });
+
+  const [eyeOpen, setEyeOpen] = useState(false);
+  const handleEyeOpen = () => {
+    setEyeOpen(!eyeOpen);
+  };
 
   const onSubmit = async (data: loginInput) => {
     try {
@@ -79,14 +85,28 @@ function LoginForm() {
               </span>
             )}
           </div>
-          <div className="w-full mb-1">
+          <div className="w-full mb-1 relative">
             <Label>Password</Label>
             <Input
               {...register("password")}
               className="w-full mt-1"
               placeholder="*************"
-              type="password"
+              type={eyeOpen ? "text" : "password"}
             />
+            {
+              <Button
+                type="button"
+                className="absolute top-4.5 right-0"
+                variant={"outline"}
+                onClick={handleEyeOpen}
+              >
+                {eyeOpen ? (
+                  <EyeIcon className="size-4.5" />
+                ) : (
+                  <EyeOffIcon className="size-4.5" />
+                )}
+              </Button>
+            }
             {errors.password && (
               <span className="text-red-500 mt-1 font-medium text-sm">
                 {errors.password.message}

@@ -31,7 +31,8 @@ export async function POST(request: NextRequest) {
     await User.create({
         email: data.email,
         username: data.username,
-        password: hashedPassword
+        password: hashedPassword,
+        name: data.name
     })
 
     return NextResponse.json({ message: "User registerd successfully" }, { status: 201 })

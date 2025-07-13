@@ -23,7 +23,7 @@ export async function connectToDatabase() {
             const Opts = {
                 bufferCommands: false,
                 maxPoolSize: 10,
-                dbName: "Pinterest"
+                dbName: "Preronaa"
             }
 
             cached.promise = mongoose.connect(MONGODB_URI, Opts)

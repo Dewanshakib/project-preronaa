@@ -1,15 +1,19 @@
 import EditProfileForm from "@/components/profile/edit-profile-form";
 import { authOptions } from "@/lib/authOptions";
-import { ISession } from "@/types/types";
 import { getServerSession } from "next-auth";
 import React from "react";
 
 export default async function EditProfile() {
   const session = await getServerSession(authOptions);
+  const userId = session?.user?.id;
+  const res = await fetch(
+    `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/${userId}`
+  );
+  const user = await res?.json();
 
   return (
     <div className="w-full h-auto">
-      <EditProfileForm userDetails={session?.user as ISession} />
+      <EditProfileForm userDetails={user} />
     </div>
   );
 }

@@ -11,11 +11,12 @@ declare global {
 export { }
 
 
-export interface ISession {
+export interface IUserDetails {
     name: string,
+    username: string,
     email: string,
     image: string | null,
-    id: string,
+    _id: string,
     bio: string | null,
     follower: [],
     following: []
