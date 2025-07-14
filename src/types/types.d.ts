@@ -12,12 +12,13 @@ export { }
 
 
 export interface IUserDetails {
-    name: string,
-    username: string,
-    email: string,
-    image: string | null,
-    _id: string,
-    bio: string | null,
-    follower: [],
-    following: []
+    _id: string;
+    name: string;
+    username: string;
+    email: string;
+    avater: string | null;
+    avaterId: string | null;
+    bio: string | null;
+    follower: [];
+    following: [];
 }

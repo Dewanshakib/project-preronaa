@@ -58,7 +58,7 @@ function ForgetPasswordForm() {
             className="object-contain"
             alt="preronaa logo"
             fill
-            sizes="max-w-[120px]"
+            sizes="(max-width:120px)"
           />
         </div>
         <div className="text-center">

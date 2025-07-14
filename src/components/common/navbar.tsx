@@ -15,17 +15,21 @@ function Navbar() {
     <div>
       <div className="flex items-center justify-between py-2">
         {/* Logo */}
-        <Link className="flex items-center gap-2" href={"/"}>
-          <Image
-            src={logo}
-            alt="preronaa logo"
-            priority
-            width={24}
-            height={24}
-          />
+        <a className="flex items-center gap-2" href={"/"}>
+          <div className="w-6 h-6 relative">
+            <Image
+              src={logo}
+              alt="preronaa logo"
+              fill
+              loading={undefined}
+              sizes="(max-width:24px)"
+              priority
+              suppressHydrationWarning
+            />
+          </div>
 
           <h1 className="font-bold text-2xl">Preronaa</h1>
-        </Link>
+        </a>
 
         {/* navlinks */}
         <div className="flex items-center gap-2">
@@ -37,7 +41,7 @@ function Navbar() {
                 </Link>
               </Button>
               <Button>
-                <Link className="flex items-center gap-1" href={"/create"}>
+                <Link className="flex items-center gap-1" href={"/pin/create"}>
                   <p className="font-bold hidden md:block">Create</p>{" "}
                   <CirclePlus className="md:size-4 size-5" />
                 </Link>

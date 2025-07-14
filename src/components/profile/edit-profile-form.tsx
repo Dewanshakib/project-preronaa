@@ -18,7 +18,9 @@ function EditProfileForm({ userDetails }: { userDetails: IUserDetails }) {
   const router = useRouter();
   const imageRef = useRef<HTMLInputElement | null>(null);
   const [imageFile, setImageFile] = useState<File | undefined>(undefined);
-  const [imgUrl, setImgUrl] = useState<string | null>(null);
+  const [imgUrl, setImgUrl] = useState<string | null>(
+    (userDetails.avater && userDetails.avater) || null
+  );
 
   const {
     register,
@@ -95,12 +97,13 @@ function EditProfileForm({ userDetails }: { userDetails: IUserDetails }) {
                 alt="avatar"
                 fill
                 className="object-cover rounded-full"
+                sizes="(max-width:160px)"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center rounded-full bg-gray-100">
-                <p className="text-4xl text-black/70 font-bold">
+                <span className="text-4xl text-black/70 font-bold">
                   {userDetails.name.charAt(0)}
-                </p>
+                </span>
               </div>
             )}
           </div>

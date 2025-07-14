@@ -56,7 +56,7 @@ function ResetPasswordForm() {
             className="object-contain"
             alt="pinterest logo"
             fill
-            sizes="max-w-[120px]"
+            sizes="(max-width:120px)"
           />
         </div>
         <div className="text-center">

@@ -43,6 +43,15 @@ export async function POST(request: NextRequest) {
             const imageFile = generateContent(image, buffer)
             if (imageFile) {
                 const cloud = await cloudinary.uploader.upload(imageFile)
+
+                // when new image comes delete previous image from user
+                if (cloud.public_id !== user.avaterId) {
+                    if (user.avaterId) {
+                        await cloudinary.uploader.destroy(user.avaterId as string)
+                    }
+
+                }
+
                 if (cloud) {
                     user.avater = cloud.secure_url
                     user.avaterId = cloud.public_id

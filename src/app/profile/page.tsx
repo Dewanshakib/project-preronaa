@@ -27,6 +27,7 @@ export default async function Profile() {
               className="object-fill"
               alt="user photo"
               src={user.avater}
+              sizes="(max-width:160px)"
             />
           ) : (
             <div className="w-full h-full bg-gray-200 rounded-full grid place-items-center">

@@ -35,3 +35,10 @@ export const editProfileSchema = z.object({
 })
 
 export type editProfileInput = z.infer<typeof editProfileSchema>
+
+
+export const createPinSchema = z.object({
+    caption: z.string().trim().min(1, { message: "Caption cannot be empty or just spaces" }).max(70, { message: "Caption must be under 70 characters" }),
+})
+
+export type createPinInput = z.infer<typeof createPinSchema>
