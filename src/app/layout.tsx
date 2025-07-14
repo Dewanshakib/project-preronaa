@@ -11,8 +11,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Pinterest",
-  description: "Pinterest clone app",
+  title: "Preronaa",
+  description: "Preronaa app where you can share your pins and ideas",
 };
 
 export default async function RootLayout({
@@ -27,7 +27,6 @@ export default async function RootLayout({
           <header className="sticky top-0">
             <Navbar />
           </header>
-
           {children}
           <Toaster />
         </SessionWrapper>

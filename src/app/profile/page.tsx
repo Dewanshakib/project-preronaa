@@ -24,7 +24,7 @@ export default async function Profile() {
           {user?.avater ? (
             <Image
               fill
-              className="object-fill"
+              className="object-cover"
               alt="user photo"
               src={user.avater}
               sizes="(max-width:160px)"

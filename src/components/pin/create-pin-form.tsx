@@ -64,6 +64,7 @@ function CreatePinForm({ creatorId }: { creatorId: string }) {
 
       toast.success(result.message);
       router.push("/profile");
+      router.refresh()
     } catch (error) {
       console.log(error);
     }

@@ -12,6 +12,7 @@ const PinSchema = new Schema<IPin>({
     caption: { type: String, required: true },
     photoUrl: { type: String, required: true },
     photoId: { type: String, required: true },
+    like: { type: Array, required: false },
     creatorId: { ref: "User", type: Schema.Types.ObjectId }
 }, { timestamps: true })
 

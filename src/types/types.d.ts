@@ -22,3 +22,11 @@ export interface IUserDetails {
     follower: [];
     following: [];
 }
+
+export interface IPinDetails {
+    _id: string;
+    caption: string;
+    photoUrl: string,
+    like: [],
+    creatorId: string,
+}

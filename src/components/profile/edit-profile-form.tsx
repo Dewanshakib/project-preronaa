@@ -69,6 +69,7 @@ function EditProfileForm({ userDetails }: { userDetails: IUserDetails }) {
 
       toast.success(result.message || "Profile updated!");
       router.push(`/profile`);
+      router.refresh();
     } catch (err) {
       console.log(err);
     }

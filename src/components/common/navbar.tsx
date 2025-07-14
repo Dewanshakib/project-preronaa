@@ -15,7 +15,7 @@ function Navbar() {
     <div>
       <div className="flex items-center justify-between py-2">
         {/* Logo */}
-        <a className="flex items-center gap-2" href={"/"}>
+        <Link className="flex items-center gap-2" href={"/"}>
           <div className="w-6 h-6 relative">
             <Image
               src={logo}
@@ -29,7 +29,7 @@ function Navbar() {
           </div>
 
           <h1 className="font-bold text-2xl">Preronaa</h1>
-        </a>
+        </Link>
 
         {/* navlinks */}
         <div className="flex items-center gap-2">
