@@ -11,6 +11,8 @@ export default async function CreatePin() {
   );
   const user = await res?.json();
 
+  // console.log(session)
+
   return (
     <div>
       <CreatePinForm creatorId={user?._id}/>

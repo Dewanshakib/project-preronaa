@@ -35,7 +35,7 @@ export async function POST(request: NextRequest) {
         if (imageContent) {
             const photo = await cloudinary.uploader.upload(imageContent)
             await Pin.create({
-                creatorId,
+                creator: creatorId,
                 caption: parsed.data.caption,
                 photoId: photo.public_id,
                 photoUrl: photo.secure_url

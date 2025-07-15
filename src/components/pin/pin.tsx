@@ -9,7 +9,7 @@ function Pin({ pin }: { pin: IPinDetails }) {
   return (
     <div className="w-full h-auto">
       <Link href={`/pin/${pin._id}`}>
-        <div className="w-full h-80 relative">
+        <div className="w-full relative aspect-[16/9]">
           <Image
             fill
             src={pin.photoUrl}

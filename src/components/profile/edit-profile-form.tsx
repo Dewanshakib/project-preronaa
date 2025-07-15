@@ -56,7 +56,7 @@ function EditProfileForm({ userDetails }: { userDetails: IUserDetails }) {
       if (imageFile) formData.append("avater", imageFile);
 
       const res = await fetch("/api/profile/edit", {
-        method: "POST",
+        method: "PUT",
         body: formData,
       });
 

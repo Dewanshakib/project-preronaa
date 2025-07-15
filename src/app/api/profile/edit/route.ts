@@ -7,7 +7,7 @@ import cloudinary from "@/lib/cloudinary";
 import { connectToDatabase } from "@/lib/db";
 
 
-export async function POST(request: NextRequest) {
+export async function PUT(request: NextRequest) {
     try {
         const formData = await request.formData();
         const userId = formData.get("userId") as string | null;
@@ -62,7 +62,7 @@ export async function POST(request: NextRequest) {
         }
 
 
-        user.name = parsed.data.name;
+        user.name = parsed.data.name || user.name;
         user.bio = parsed.data.bio || user.bio;
 
         await user.save();

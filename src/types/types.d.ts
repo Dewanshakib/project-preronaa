@@ -23,10 +23,16 @@ export interface IUserDetails {
     following: [];
 }
 
+export interface ICreator {
+    _id: string;
+    username: string;
+    email: string;
+}
+
 export interface IPinDetails {
     _id: string;
     caption: string;
     photoUrl: string,
     like: [],
-    creatorId: string,
+    creator: ICreator,
 }

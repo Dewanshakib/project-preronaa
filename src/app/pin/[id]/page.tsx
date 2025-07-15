@@ -1,3 +1,4 @@
+import DeletePin from "@/components/pin/delete-pin";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -6,8 +7,15 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { IPinDetails } from "@/types/types";
-import { Bookmark, Heart, MessageCircle } from "lucide-react";
+import {
+  Bookmark,
+  Heart,
+  MessageCircle,
+  SquarePen,
+  Trash2,
+} from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 export default async function Pin({
@@ -25,8 +33,24 @@ export default async function Pin({
   return (
     <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col">
       <CardHeader>
-        <div className="">
-          <h1 className="font-medium text-xl">{pin.caption}</h1>
+        <div className="flex items-center justify-between">
+          <div className="">
+            <h1 className="font-medium text-xl">{pin.caption}</h1>
+            <Link
+              href={`/profile/${pin.creator._id}`}
+              className="tex-sm text-gray-600 font-medium"
+            >
+              @{pin.creator.username}
+            </Link>
+          </div>
+          <div className="flex items-center gap-3">
+            <Link href={`/pin/edit/${id}`}>
+              <Button variant={"outline"}>
+                <SquarePen className="size-4" />
+              </Button>
+            </Link>
+            <DeletePin pinId={pin._id}/>
+          </div>
         </div>
       </CardHeader>
       <CardContent>

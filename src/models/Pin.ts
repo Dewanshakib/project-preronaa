@@ -5,7 +5,7 @@ export interface IPin extends Document {
     photoUrl: string;
     photoId: string;
     like?: Array<string>;
-    creatorId: Schema.Types.ObjectId;
+    creator: Schema.Types.ObjectId;
 }
 
 const PinSchema = new Schema<IPin>({
@@ -13,7 +13,7 @@ const PinSchema = new Schema<IPin>({
     photoUrl: { type: String, required: true },
     photoId: { type: String, required: true },
     like: { type: Array, required: false },
-    creatorId: { ref: "User", type: Schema.Types.ObjectId }
+    creator: { ref: "User", type: Schema.Types.ObjectId }
 }, { timestamps: true })
 
 const Pin = models?.Pin || model<IPin>("Pin", PinSchema)
