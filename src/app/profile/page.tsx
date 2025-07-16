@@ -43,7 +43,6 @@ export default async function Profile() {
           <div className="flex items-center flex-row gap-3 font-medium text-sm mt-1.5">
             <p>Followers: {user?.follower?.length}</p>
             <p>Following: {user?.following?.length}</p>
-            {/* {user?.bio && <p>{user?.bio}</p>} */}
           </div>
           {user?.bio && (
             <div className="mt-1">

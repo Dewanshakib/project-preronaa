@@ -19,20 +19,22 @@ export interface IUserDetails {
     avater: string | null;
     avaterId: string | null;
     bio: string | null;
-    follower: [];
-    following: [];
+    follower: string[];
+    following: string[];
 }
 
 export interface ICreator {
     _id: string;
     username: string;
     email: string;
+    avater:string | null;
+    name:string;
 }
 
 export interface IPinDetails {
     _id: string;
     caption: string;
     photoUrl: string,
-    like: [],
+    like: string[],
     creator: ICreator,
 }
