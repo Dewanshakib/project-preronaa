@@ -21,6 +21,7 @@ export interface IUserDetails {
     bio: string | null;
     follower: string[];
     following: string[];
+    bookmarks:string[];
 }
 
 export interface ICreator {
@@ -38,3 +39,11 @@ export interface IPinDetails {
     like: string[],
     creator: ICreator,
 }
+
+export interface IUserPin {
+  _id: string;
+  caption: string;
+  photoUrl: string;
+  photoId: string;
+  like: string[];
+};

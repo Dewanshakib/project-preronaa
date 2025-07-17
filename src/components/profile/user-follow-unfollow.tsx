@@ -1,16 +1,24 @@
 "use client";
-import React, { FormEvent } from "react";
+import React, { FormEvent, use } from "react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
 
-function UserUnfollow({ userId }: { userId: string }) {
+function UserFollowUnfollow({
+  userId,
+  currentUser,
+  followInfo,
+}: {
+  userId: string;
+  currentUser: string;
+  followInfo: boolean;
+}) {
+  const router = useRouter();
 
-  const router = useRouter()
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/profile/follow", {
+      const res = await fetch("/api/profile/follow&Unfollow", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -24,7 +32,7 @@ function UserUnfollow({ userId }: { userId: string }) {
       }
 
       toast.success(result.message);
-      router.refresh()
+      router.refresh();
     } catch (error) {
       console.log(error);
     }
@@ -33,12 +41,18 @@ function UserUnfollow({ userId }: { userId: string }) {
   return (
     <div>
       <form onSubmit={onSubmit}>
-        <Button type="submit" variant={"outline"} className="mt-4">
-          Unfollow
-        </Button>
+        {followInfo ? (
+          <Button type="submit" variant={"outline"} className={`${currentUser === userId && "hidden"} mt-4`}>
+            Unfollow
+          </Button>
+        ) : (
+          <Button type="submit" variant={"outline"} className={`${currentUser === userId && "hidden"} mt-4`}>
+            Follow
+          </Button>
+        )}
       </form>
     </div>
   );
 }
 
-export default UserUnfollow;
+export default UserFollowUnfollow;

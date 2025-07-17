@@ -1,5 +1,8 @@
+import UserPins from "@/components/pin/user-pins";
+import BookmarkedPins from "@/components/profile/bookmarked-pins";
 import { Button } from "@/components/ui/button";
 import { authOptions } from "@/lib/authOptions";
+import { IUserDetails } from "@/types/types";
 import { SquarePen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -8,13 +11,12 @@ import React from "react";
 
 export default async function Profile() {
   const session = await getServerSession(authOptions);
-  const userId = session?.user?.id;
+  const userId = session?.user?.id as string;
   const res = await fetch(
     `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/${userId}`
   );
-  const user = await res?.json();
 
-  // console.log(user);
+  const user: IUserDetails = await res?.json();
 
   return (
     <div className="w-full mt-20 ">
@@ -58,7 +60,10 @@ export default async function Profile() {
       </div>
 
       {/* user pins */}
-      <div className="mt-10">User pins</div>
+      <div className="mt-20 max-w-5xl mx-auto">
+        <UserPins userId={userId} />
+        <BookmarkedPins/>
+      </div>
     </div>
   );
 }

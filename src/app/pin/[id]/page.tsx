@@ -1,6 +1,6 @@
 import DeletePin from "@/components/pin/delete-pin";
-import UserDislikeButton from "@/components/pin/pin-dislike";
-import UserLikeButton from "@/components/pin/pin-like";
+import PinBookmark from "@/components/pin/pin-bookmark";
+import UserLikeDislikeButton from "@/components/pin/pin-like-dislike-btn";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -9,7 +9,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { authOptions } from "@/lib/authOptions";
-import { IPinDetails } from "@/types/types";
+import { IPinDetails, IUserDetails } from "@/types/types";
 import { Bookmark, Heart, MessageCircle, SquarePen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -21,12 +21,23 @@ export default async function Pin({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const id = (await params).id;
+  const pinId = (await params).id;
 
-  const res = await fetch(`${process.env.BASE_URL}/api/pin/${id}`);
+  // fetching pin
+  const res = await fetch(`${process.env.BASE_URL}/api/pin/${pinId}`);
   const pin: IPinDetails = await res?.json();
+
+  // getting session
   const session = await getServerSession(authOptions);
   const currentUser = session?.user?.id as string;
+
+  // fetching user info
+  const resUser = await fetch(
+    `${process.env.BASE_URL}/api/profile/${currentUser}`
+  );
+  const user: IUserDetails = await resUser?.json();
+
+  // console.log(user)
 
   return (
     <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col">
@@ -62,7 +73,7 @@ export default async function Pin({
           </div>
           {pin.creator._id === currentUser && (
             <div className="flex items-center gap-3">
-              <Link href={`/pin/edit/${id}`}>
+              <Link href={`/pin/edit/${pinId}`}>
                 <Button variant={"outline"}>
                   <SquarePen className="size-4" />
                 </Button>
@@ -86,13 +97,13 @@ export default async function Pin({
       <CardFooter>
         <div className="flex items-start justify-between gap-3 w-full">
           <div className="flex gap-1 items-start">
-            {/* like or dislike btn */}
+            {/* like and dislike btn */}
             <div className="flex items-center flex-col">
-              {pin.like.includes(currentUser) ? (
-                <UserLikeButton userId={currentUser} pinId={pin._id} />
-              ) : (
-                <UserDislikeButton userId={currentUser} pinId={pin._id} />
-              )}
+              <UserLikeDislikeButton
+                userId={currentUser}
+                pinId={pin._id}
+                likeInfo={pin.like.includes(currentUser)}
+              />
               <p className="text-sm font-medium">{pin.like.length}</p>
             </div>
 
@@ -103,9 +114,11 @@ export default async function Pin({
           </div>
 
           {/* bookmark btn */}
-          <Button variant={"ghost"}>
-            <Bookmark className="size-5.5" />
-          </Button>
+          <PinBookmark
+            userId={currentUser}
+            pinId={pin._id}
+            bookmarkInfo={user.bookmarks.includes(pinId)}
+          />
         </div>
       </CardFooter>
     </Card>

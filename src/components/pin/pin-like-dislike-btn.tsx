@@ -3,22 +3,24 @@
 import React, { FormEvent } from "react";
 import { Button } from "../ui/button";
 import { Heart } from "lucide-react";
-import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useRouter } from "next/navigation";
 
-function UserDislikeButton({
+function UserLikeDislikeButton({
   userId,
   pinId,
+  likeInfo,
 }: {
   userId: string;
   pinId: string;
+  likeInfo: boolean;
 }) {
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/pin/like", {
+      const res = await fetch("/api/pin/like&dislike", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -40,11 +42,17 @@ function UserDislikeButton({
 
   return (
     <form onSubmit={onSubmit}>
-      <Button type="submit" variant={"ghost"}>
-        <Heart className="size-6" />
-      </Button>
+      {likeInfo ? (
+        <Button type="submit" variant={"ghost"}>
+          <Heart className="size-6" fill="red" color="red" />
+        </Button>
+      ) : (
+        <Button type="submit" variant={"ghost"}>
+          <Heart className="size-6" />
+        </Button>
+      )}
     </form>
   );
 }
 
-export default UserDislikeButton;
+export default UserLikeDislikeButton;

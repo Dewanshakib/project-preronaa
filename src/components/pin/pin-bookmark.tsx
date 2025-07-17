@@ -1,18 +1,25 @@
 "use client";
-
-import React, { FormEvent } from "react";
-import { Button } from "../ui/button";
-import { Heart } from "lucide-react";
-import { toast } from "sonner";
 import { useRouter } from "next/navigation";
+import React, { FormEvent } from "react";
+import { toast } from "sonner";
+import { Button } from "../ui/button";
+import { Bookmark } from "lucide-react";
 
-function UserLikeButton({ userId, pinId }: { userId: string; pinId: string }) {
+function PinBookmark({
+  userId,
+  pinId,
+  bookmarkInfo,
+}: {
+  userId: string;
+  pinId: string;
+  bookmarkInfo: boolean;
+}) {
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/pin/like", {
+      const res = await fetch("/api/pin/bookmark", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -34,11 +41,17 @@ function UserLikeButton({ userId, pinId }: { userId: string; pinId: string }) {
 
   return (
     <form onSubmit={onSubmit}>
-      <Button type="submit" variant={"ghost"}>
-        <Heart className="size-6" fill="red" color="red" />
-      </Button>
+      {bookmarkInfo ? (
+        <Button type="submit" variant={"ghost"}>
+          <Bookmark className="size-6" fill="black"/>
+        </Button>
+      ) : (
+        <Button type="submit" variant={"ghost"}>
+          <Bookmark className="size-6" />
+        </Button>
+      )}
     </form>
   );
 }
 
-export default UserLikeButton;
+export default PinBookmark;

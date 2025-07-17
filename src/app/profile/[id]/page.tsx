@@ -1,5 +1,5 @@
-import UserFollow from "@/components/profile/user-follow";
-import UserUnfollow from "@/components/profile/user-unfollow";
+import UserPins from "@/components/pin/user-pins";
+import UserFollowUnfollow from "@/components/profile/user-follow-unfollow";
 import { authOptions } from "@/lib/authOptions";
 import { IUserDetails } from "@/types/types";
 import { getServerSession } from "next-auth";
@@ -54,16 +54,19 @@ export default async function Profiles({
               <p className="font-medium">{user?.bio}</p>
             </div>
           )}
-          {user.follower.includes(currentUser) ? (
-            <UserUnfollow userId={user._id} />
-          ) : (
-            user._id !== currentUser && <UserFollow userId={user._id} />
-          )}
+
+          <UserFollowUnfollow
+            userId={userId}
+            currentUser={currentUser}
+            followInfo={user.follower.includes(currentUser)}
+          />
         </div>
       </div>
 
       {/* user pins */}
-      <div className="mt-10">User pins</div>
+      <div className="mt-20 max-w-5xl mx-auto">
+        <UserPins userId={userId} />
+      </div>
     </div>
   );
 }
