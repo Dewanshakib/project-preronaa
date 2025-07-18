@@ -15,19 +15,20 @@ export const metadata: Metadata = {
   description: "Preronaa app where you can share your pins and ideas",
 };
 
-export default async function RootLayout({
+export default function RootLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+
   return (
     <html lang="en">
-      <body className={` ${geistMono.variable} antialiased px-4 py-2`}>
+      <body className={` ${geistMono.variable} antialiased px-4`}>
         <SessionWrapper>
-          <header className="sticky top-0">
+          <header className="sticky top-0 z-50 bg-white/10 backdrop-blur-md rounded-b-md  py-3 px-4">
             <Navbar />
           </header>
-          {children}
+          <div className="py-2">{children}</div>
           <Toaster />
         </SessionWrapper>
       </body>

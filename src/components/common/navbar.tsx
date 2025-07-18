@@ -12,24 +12,27 @@ function Navbar() {
   // console.log(session)
 
   return (
-    <div>
-      <div className="flex items-center justify-between py-2">
+    <div className={`${!session && "hidden"}`}>
+      <div className="flex items-center justify-between">
         {/* Logo */}
-        <Link className="flex items-center gap-2" href={"/"}>
-          <div className="w-6 h-6 relative">
-            <Image
-              src={logo}
-              alt="preronaa logo"
-              fill
-              loading={undefined}
-              sizes="(max-width:24px)"
-              priority
-              suppressHydrationWarning
-            />
-          </div>
 
-          <h1 className="font-bold text-2xl">Preronaa</h1>
-        </Link>
+        <section className="flex items-center">
+          <span className="w-5 h-5 sm:w-6 sm:h-6 relative">
+            <Link className="" href={"/"}>
+              <Image
+                src={logo}
+                alt="preronaa logo"
+                fill
+                sizes="(max-width:24px)"
+                priority
+                suppressHydrationWarning // handling susspense error
+              />
+            </Link>
+          </span>
+          <Link href={'/'}>
+            <h1 className="font-bold text-xl sm:text-2xl ml-2">Preronaa</h1>
+          </Link>
+        </section>
 
         {/* navlinks */}
         <div className="flex items-center gap-2">
@@ -37,7 +40,7 @@ function Navbar() {
             <>
               <Button variant={"link"}>
                 <Link href={`/profile`}>
-                  <CircleUser className="size-7" />
+                  <CircleUser className="size-6 sm:size-7" />
                 </Link>
               </Button>
               <Button>

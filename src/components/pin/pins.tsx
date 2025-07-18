@@ -1,17 +1,15 @@
 import { IPinDetails } from "@/types/types";
 import React from "react";
-import Pin from "./pin";
+import PinCard from "./pin-card";
 
 function Pins({ pins }: { pins: Array<IPinDetails> }) {
-  if (!pins) return <h1>Loaing...</h1>;
 
-  // console.log(pins)
 
   return (
     <div>
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
         {pins && pins.length > 0 ? (
-          pins.map((pin, index) => <Pin key={index} pin={pin} />)
+          pins.map((pin, index) => <PinCard key={index} pin={pin} />)
         ) : (
           <h1>No pins to show</h1>
         )}

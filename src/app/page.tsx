@@ -1,5 +1,5 @@
 import Pins from "@/components/pin/pins";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default async function Home() {
   const res = await fetch(`${process.env.BASE_URL}/api/pin/all`);
@@ -9,7 +9,9 @@ export default async function Home() {
 
   return (
     <div className="p-4">
-      <Pins pins={data}/>
+      <Suspense fallback={<h1 className="text-2xl font-bold text-center">Loading...</h1>}>
+        <Pins pins={data}/>
+      </Suspense>
     </div>
   );
 }

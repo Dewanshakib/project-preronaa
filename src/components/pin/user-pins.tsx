@@ -3,18 +3,23 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-async function UserPins({ userId }: { userId: string }) {
+async function UserPins({
+  userId,
+  pinType,
+}: {
+  userId: string;
+  pinType?: string;
+}) {
   const res = await fetch(
-    `${process.env.BASE_URL}/api/profile/${userId}/pins`,
+    `${process.env.BASE_URL}/api/profile/${userId}/pins?category=${pinType}`,
     { method: "GET" }
   );
   const data: IUserPin[] = await res?.json();
-  // console.log(data);
 
   return (
     <div>
       {data && data.length > 0 ? (
-        <div>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
           {data.map((pin, idx) => (
             <div key={idx}>
               <div className="relative aspect-[16/9] max-w-sm">
@@ -23,7 +28,8 @@ async function UserPins({ userId }: { userId: string }) {
                     alt="pin photo"
                     src={pin.photoUrl}
                     fill
-                    className="object-cover"
+                    loading="lazy"
+                    className="object-cover rounded-md"
                   />
                 </Link>
               </div>

@@ -21,11 +21,13 @@ export async function POST(request: NextRequest) {
 
         if (user.bookmarks?.includes(pinId)) {
             await User.findByIdAndUpdate(userId, { $pull: { bookmarks: pinId } })
+            return NextResponse.json({ message: "You removed bookmark from this pin" }, { status: 200 })
         } else {
             await User.findByIdAndUpdate(userId, { $push: { bookmarks: pinId } })
+            return NextResponse.json({ message: "You bookmarked this pin" }, { status: 200 })
         }
 
-        return NextResponse.json({ message: "You bookmarked this pin" }, { status: 200 })
+        
 
     } catch (error) {
         return NextResponse.json({ error: "Server error while bookmarking the pin!" }, { status: 400 })

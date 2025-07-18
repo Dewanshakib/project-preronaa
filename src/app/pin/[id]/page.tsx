@@ -1,3 +1,4 @@
+import Comments from "@/components/pin/comments";
 import DeletePin from "@/components/pin/delete-pin";
 import PinBookmark from "@/components/pin/pin-bookmark";
 import UserLikeDislikeButton from "@/components/pin/pin-like-dislike-btn";
@@ -10,11 +11,12 @@ import {
 } from "@/components/ui/card";
 import { authOptions } from "@/lib/authOptions";
 import { IPinDetails, IUserDetails } from "@/types/types";
-import { Bookmark, Heart, MessageCircle, SquarePen } from "lucide-react";
+import { SquarePen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
+import React, { Suspense } from "react";
+import AddPinComment from "@/components/pin/add-pin-comment";
 
 export default async function Pin({
   params,
@@ -40,11 +42,11 @@ export default async function Pin({
   // console.log(user)
 
   return (
-    <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col">
+    <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col my-8">
       <CardHeader>
-        <div className="flex items-center justify-between">
+        <div className="flex items-start justify-between">
           <div className="">
-            <h1 className="font-medium text-xl">{pin.caption}</h1>
+            <h1 className="font-medium text-xl mb-6">{pin.caption}</h1>
             <div className="flex items-center gap-1.5 mt-2">
               <div className="w-6 h-6 relative rounded-full overflow-hidden">
                 {pin.creator?.avater ? (
@@ -52,6 +54,7 @@ export default async function Pin({
                     fill
                     className="object-cover"
                     alt="user photo"
+                    loading="lazy"
                     src={pin.creator?.avater}
                     sizes="(max-width:20px)"
                   />
@@ -84,18 +87,23 @@ export default async function Pin({
         </div>
       </CardHeader>
       <CardContent>
-        <div className="relative w-full aspect-[16/9]">
-          <Image
-            src={pin.photoUrl}
-            alt="Awesome Image"
-            fill
-            className="object-cover rounded-lg"
-            priority
-          />
-        </div>
-      </CardContent>
-      <CardFooter>
-        <div className="flex items-start justify-between gap-3 w-full">
+        <Suspense
+          fallback={
+            <p className="text-2xl font-bold text-center">Loading...</p>
+          }
+        >
+          <div className="relative w-full aspect-[16/9]">
+            <Image
+              src={pin.photoUrl}
+              alt="Awesome Image"
+              fill
+              className="object-cover rounded-lg"
+              loading="lazy"
+            />
+          </div>
+        </Suspense>
+
+        <div className="flex items-start justify-between gap-3 w-full mt-4">
           <div className="flex gap-1 items-start">
             {/* like and dislike btn */}
             <div className="flex items-center flex-col">
@@ -107,10 +115,8 @@ export default async function Pin({
               <p className="text-sm font-medium">{pin.like.length}</p>
             </div>
 
-            {/* comment btn */}
-            <Button variant={"ghost"}>
-              <MessageCircle className="size-5.5" />
-            </Button>
+            {/* pin comment section */}
+            <AddPinComment userId={currentUser} pinId={pin._id} />
           </div>
 
           {/* bookmark btn */}
@@ -120,6 +126,9 @@ export default async function Pin({
             bookmarkInfo={user.bookmarks.includes(pinId)}
           />
         </div>
+      </CardContent>
+      <CardFooter>
+         <Comments/>
       </CardFooter>
     </Card>
   );

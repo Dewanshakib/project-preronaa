@@ -4,7 +4,7 @@ import { authOptions } from "@/lib/authOptions";
 import { IUserDetails } from "@/types/types";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
-import React from "react";
+import React, { Suspense } from "react";
 
 export default async function Profiles({
   params,
@@ -65,7 +65,9 @@ export default async function Profiles({
 
       {/* user pins */}
       <div className="mt-20 max-w-5xl mx-auto">
-        <UserPins userId={userId} />
+        <Suspense fallback={<h1 className="text-2xl font-semibold text-center mt-30">Loading...</h1>}>
+          <UserPins userId={userId}/>
+        </Suspense>
       </div>
     </div>
   );

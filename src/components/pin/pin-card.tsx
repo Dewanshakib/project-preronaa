@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-function Pin({ pin }: { pin: IPinDetails }) {
+function PinCard({ pin }: { pin: IPinDetails }) {
   // console.log(pin)
 
   return (
@@ -14,7 +14,8 @@ function Pin({ pin }: { pin: IPinDetails }) {
             fill
             src={pin.photoUrl}
             alt="pin photo"
-            priority
+            // priority - - both prioty and loading cannot exists
+            loading="lazy"
             className="object-cover rounded hover:opacity-90"
             sizes="(max-width:120px)"
           />
@@ -24,4 +25,4 @@ function Pin({ pin }: { pin: IPinDetails }) {
   );
 }
 
-export default Pin;
+export default PinCard;

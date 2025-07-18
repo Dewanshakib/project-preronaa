@@ -9,7 +9,7 @@ export async function GET(request: NextRequest) {
 
         await connectToDatabase()
 
-        const pins = await Pin.find()
+        const pins = await Pin.find().sort({createdAt:-1})
 
         return NextResponse.json(pins, { status: 200 })
 
