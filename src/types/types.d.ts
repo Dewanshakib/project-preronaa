@@ -21,15 +21,15 @@ export interface IUserDetails {
     bio: string | null;
     follower: string[];
     following: string[];
-    bookmarks:string[];
+    bookmarks: string[];
 }
 
 export interface ICreator {
     _id: string;
     username: string;
     email: string;
-    avater:string | null;
-    name:string;
+    avater: string | null;
+    name: string;
 }
 
 export interface IPinDetails {
@@ -41,9 +41,22 @@ export interface IPinDetails {
 }
 
 export interface IUserPin {
-  _id: string;
-  caption: string;
-  photoUrl: string;
-  photoId: string;
-  like: string[];
+    _id: string;
+    caption: string;
+    photoUrl: string;
+    photoId: string;
+    like: string[];
 };
+
+interface User{
+    avater:string | null;
+    username:string;
+    _id:string;
+}
+
+export interface ICommentDetails {
+    _id: string;
+    comment: string;
+    creator: User;
+    pinId: string;
+}

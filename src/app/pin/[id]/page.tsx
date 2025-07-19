@@ -1,4 +1,4 @@
-import Comments from "@/components/pin/comments";
+
 import DeletePin from "@/components/pin/delete-pin";
 import PinBookmark from "@/components/pin/pin-bookmark";
 import UserLikeDislikeButton from "@/components/pin/pin-like-dislike-btn";
@@ -10,13 +10,14 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { authOptions } from "@/lib/authOptions";
-import { IPinDetails, IUserDetails } from "@/types/types";
+import { ICommentDetails, IPinDetails, IUserDetails } from "@/types/types";
 import { SquarePen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
 import React, { Suspense } from "react";
 import AddPinComment from "@/components/pin/add-pin-comment";
+import PinComments from "@/components/pin/pin-comments";
 
 export default async function Pin({
   params,
@@ -26,8 +27,8 @@ export default async function Pin({
   const pinId = (await params).id;
 
   // fetching pin
-  const res = await fetch(`${process.env.BASE_URL}/api/pin/${pinId}`);
-  const pin: IPinDetails = await res?.json();
+  const resPin = await fetch(`${process.env.BASE_URL}/api/pin/${pinId}`);
+  const pin: IPinDetails = await resPin?.json();
 
   // getting session
   const session = await getServerSession(authOptions);
@@ -39,10 +40,16 @@ export default async function Pin({
   );
   const user: IUserDetails = await resUser?.json();
 
-  // console.log(user)
+  // fetching pin comments
+  const resComment = await fetch(
+    `${process.env.BASE_URL}/api/pin/${pinId}/comment/all`
+  );
+  const comments: ICommentDetails[] = await resComment?.json();
+
+  // console.log(comments)
 
   return (
-    <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col my-8">
+      <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col my-8">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="">
@@ -115,7 +122,7 @@ export default async function Pin({
               <p className="text-sm font-medium">{pin.like.length}</p>
             </div>
 
-            {/* pin comment section */}
+            {/* Add pin comment section */}
             <AddPinComment userId={currentUser} pinId={pin._id} />
           </div>
 
@@ -127,9 +134,17 @@ export default async function Pin({
           />
         </div>
       </CardContent>
-      <CardFooter>
-         <Comments/>
+      <CardFooter className="w-full">
+        {/* pin comments */}
+        {comments.length > 0 && (
+          <PinComments
+            userId={currentUser}
+            comments={comments}
+            length={comments.length}
+          />
+        )}
       </CardFooter>
     </Card>
+
   );
 }

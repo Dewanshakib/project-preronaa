@@ -5,10 +5,11 @@ import User from "@/models/User";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: NextRequest,{ params }: { params: Promise<{ id: string }>}) {
     try {
 
-        const { userId, pinId, comment } = await request.json()
+        const { userId, comment } = await request.json()
+        const pinId = (await params).id as string
 
         await connectToDatabase()
 

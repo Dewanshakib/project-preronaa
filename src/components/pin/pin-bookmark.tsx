@@ -19,7 +19,7 @@ function PinBookmark({
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/pin/bookmark", {
+      const res = await fetch("/api/pin/bookmarks", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

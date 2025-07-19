@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React, { FormEvent, useEffect, useState } from "react";
 import { Button } from "../ui/button";
 import { MessageCircle } from "lucide-react";
 import { Input } from "../ui/input";
@@ -8,19 +8,19 @@ import { useRouter } from "next/navigation";
 
 function AddPinComment({ userId, pinId }: { userId: string; pinId: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [comment, setComment] = useState<string | undefined>(undefined);
+  const [comment, setComment] = useState<string>('');
   const commentToggler = () => setIsOpen(!isOpen);
   const router = useRouter();
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     try {
-      const res = await fetch("/api/pin/comment", {
+      const res = await fetch(`/api/pin/${pinId}/comment/add`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({userId,pinId,comment}),
+        body: JSON.stringify({ userId, comment }),
       });
 
       const result = await res?.json();
@@ -29,10 +29,12 @@ function AddPinComment({ userId, pinId }: { userId: string; pinId: string }) {
       }
 
       toast.success(result.message && result.message);
-      router.refresh();
-      setIsOpen(!isOpen)
+      setComment("")
+      setIsOpen(!isOpen);
     } catch (error) {
       console.log(error);
+    } finally{
+      router.refresh();
     }
   };
 
@@ -57,14 +59,13 @@ function AddPinComment({ userId, pinId }: { userId: string; pinId: string }) {
             onChange={(e) => setComment(e.target.value)}
             className="ml-3 md:w-xl mb-2"
             placeholder="Add your comment here"
+            defaultValue={comment}
           />
           <Button type="submit" className="ml-2">
             Add
           </Button>
         </form>
       </div>
-
-
     </div>
   );
 }
