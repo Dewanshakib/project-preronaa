@@ -16,7 +16,7 @@ export default function DeletePin({ pinId }: { pinId: string }) {
       });
       const result = await res?.json();
       if (!res.ok) {
-        toast.error(result.error);
+        toast.error(result.message);
         return;
       }
 
@@ -33,7 +33,7 @@ export default function DeletePin({ pinId }: { pinId: string }) {
       <Button
         onClick={deletePinHandler}
         type="submit"
-        size={"icon"}
+        size={"sm"}
         variant={"destructive"}
       >
         <Trash2 />

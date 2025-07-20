@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useEffect, useState } from "react";
+import React, { FormEvent, useState } from "react";
 import { Button } from "../ui/button";
 import { MessageCircle } from "lucide-react";
 import { Input } from "../ui/input";
@@ -8,7 +8,7 @@ import { useRouter } from "next/navigation";
 
 function AddPinComment({ userId, pinId }: { userId: string; pinId: string }) {
   const [isOpen, setIsOpen] = useState(false);
-  const [comment, setComment] = useState<string>('');
+  const [comment, setComment] = useState<string>("");
   const commentToggler = () => setIsOpen(!isOpen);
   const router = useRouter();
 
@@ -25,7 +25,7 @@ function AddPinComment({ userId, pinId }: { userId: string; pinId: string }) {
 
       const result = await res?.json();
       if (!res?.ok) {
-        toast.error(result.error);
+        toast.error(result.message);
       }
 
       toast.success(result.message && result.message);
@@ -59,7 +59,7 @@ function AddPinComment({ userId, pinId }: { userId: string; pinId: string }) {
             onChange={(e) => setComment(e.target.value)}
             className="ml-3 md:w-xl mb-2"
             placeholder="Add your comment here"
-            defaultValue={comment}
+            value={comment}
           />
           <Button type="submit" className="ml-2">
             Add

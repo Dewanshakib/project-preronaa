@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Geist_Mono } from "next/font/google";
 import "./globals.css";
-import Navbar from "@/components/common/navbar";
+import Navbar from "@/components/common/navbar/navbar";
 import SessionWrapper from "@/components/auth/session-provider";
 import { Toaster } from "@/components/ui/sonner";
 
@@ -25,7 +25,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={` ${geistMono.variable} antialiased px-4`}>
         <SessionWrapper>
-          <header className="sticky top-0 z-50 bg-white/10 backdrop-blur-md rounded-b-md  py-3 px-4">
+          <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-md rounded-b-md  py-3 px-4">
             <Navbar />
           </header>
           <div className="py-2">{children}</div>

@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useState } from "react";
+import React, {useState } from "react";
 import { Card, CardContent, CardFooter, CardHeader } from "../ui/card";
 import { Label } from "../ui/label";
 import { Input } from "../ui/input";
@@ -42,13 +42,13 @@ function RegisterForm() {
 
       const result = await res?.json();
       if (!res.ok) {
-        toast.error(result.error);
+        toast.error(result.message);
         return;
       }
       toast.success(result.message);
       router.push("/login");
     } catch (error) {
-      throw error;
+      console.log(error)
     }
   };
 

@@ -30,7 +30,7 @@ function UserLikeDislikeButton({
 
       const result = await res?.json();
       if (!res.ok) {
-        toast.error(result.error || "Something went wrong!");
+        toast.error(result.message);
       }
 
       toast.success(result.message);

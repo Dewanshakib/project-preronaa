@@ -37,7 +37,9 @@ async function UserPins({
           ))}
         </div>
       ) : (
-        <p>No pins added yet</p>
+        <p className="font-medium ml-1.5 ">
+          {pinType ? "No bookmarks added yet" : "No pins added yet"}
+        </p>
       )}
     </div>
   );

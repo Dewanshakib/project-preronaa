@@ -14,7 +14,7 @@ export async function POST(request: NextRequest) {
         const parsed = forgetPasswordSchema.safeParse(body)
 
         if (!parsed.success) {
-            return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 })
+            return NextResponse.json({ message: parsed.error.flatten().fieldErrors }, { status: 400 })
         }
 
         const data = parsed.data
@@ -23,7 +23,7 @@ export async function POST(request: NextRequest) {
 
         const user = await User.findOne({ email: data.email }) as IUser
         if (!user) {
-            return NextResponse.json({ error: "No user found with this email" }, { status: 400 })
+            return NextResponse.json({ message: "No user found with this email" }, { status: 400 })
         }
 
         const resetToken = crypto.randomBytes(24).toString("hex") // token
@@ -36,7 +36,11 @@ export async function POST(request: NextRequest) {
         await sendEmail(data.email, resetToken)
 
         return NextResponse.json({ message: "Please check your email" }, { status: 200 })
-    } catch (error:any) {
-        return NextResponse.json({ error: error.error }, { status: 500 })
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+
+        return NextResponse.json({ error: "Unknown error occurred" }, { status: 500 })
     }
 }

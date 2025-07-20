@@ -17,7 +17,7 @@ export async function POST(request: NextRequest) {
 
         // check user authenticated or not for security
         if (!currentUserId) {
-            return NextResponse.json({ error: "User is not logged in" }, { status: 400 })
+            return NextResponse.json({ message: "User is not logged in" }, { status: 400 })
         }
 
         // logic for follow and unfollow
@@ -47,7 +47,10 @@ export async function POST(request: NextRequest) {
         }
 
 
-    } catch (error: any) {
-        return NextResponse.json({ error: error.error }, { status: 500 })
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+        return NextResponse.json({ error: "Server error occured" }, { status: 500 })
     }
 }

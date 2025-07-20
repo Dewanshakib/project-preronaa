@@ -13,7 +13,7 @@ export default async function Profile({searchParams}:{searchParams:Promise<{pins
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id as string;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/${userId}`
+    `${process.env.BASE_URL}/api/profile/${userId}`
   );
 
   const user: IUserDetails = await res?.json();

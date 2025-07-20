@@ -35,14 +35,14 @@ function ResetPasswordForm() {
 
       const result = await res?.json();
       if (!res?.ok) {
-        toast.error(result.error);
+        toast.error(result.message);
         return;
       }
 
       toast.success(result.message);
       router.push("/login");
     } catch (error) {
-      throw error;
+      console.log(error)
     }
   };
 

@@ -12,12 +12,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         await connectToDatabase()
 
         const comment = await Comment.find({ pinId: pinId }).populate({
-            path:"creator",
-            select:["-password","-name","-email","-follower","-following","-avaterId","-bio","-bookmarks","-createdAt","-updatedAt"], // excluding sensetive info..
+            path: "creator",
+            select: ["-password", "-name", "-email", "-follower", "-following", "-avaterId", "-bio", "-bookmarks", "-createdAt", "-updatedAt"], // excluding sensetive info..
         })
 
         return NextResponse.json(comment, { status: 200 })
     } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
         return NextResponse.json({ error: "Server error occured" }, { status: 500 })
     }
 }

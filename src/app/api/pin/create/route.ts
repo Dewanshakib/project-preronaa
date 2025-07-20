@@ -19,7 +19,7 @@ export async function POST(request: NextRequest) {
         const parsed = createPinSchema.safeParse(userInput)
 
         if (!parsed.success) {
-            return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 })
+            return NextResponse.json({ message: parsed.error.flatten().fieldErrors }, { status: 400 })
         }
 
         // image -> buffer
@@ -42,11 +42,14 @@ export async function POST(request: NextRequest) {
             })
 
         } else {
-            return NextResponse.json({ error: "Error while uploading to cloudinary" }, { status: 400 })
+            return NextResponse.json({ message: "Error while uploading to cloudinary" }, { status: 400 })
         }
 
         return NextResponse.json({ message: "Pin posted successfully" }, { status: 201 })
-    } catch (error: any) {
-        return NextResponse.json({ error: error.error }, { status: 500 })
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+        return NextResponse.json({ error: "Server error occured" }, { status: 500 })
     }
 }

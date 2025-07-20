@@ -1,15 +1,11 @@
-import DataURIParser from "datauri/parser"
-import path from "path"
+import { Buffer } from "buffer";
 
 export const generateContent = (file: File, buffer: Buffer) => {
-    const parser = new DataURIParser()
-    if (!file || !buffer) {
-        return false
-    }
+  if (!file || !buffer) return false;
 
-    const extName = path.extname(file.name)
-    const result = parser.format(extName, buffer)
+  const ext = file.name.split('.').pop();
+  const mimeType = ext ? `image/${ext}` : "application/octet-stream";
+  const base64 = buffer.toString("base64");
 
-    return result.content
-
-}
+  return `data:${mimeType};base64,${base64}`;
+};

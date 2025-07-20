@@ -12,9 +12,7 @@ export default async function Profiles({
   params: Promise<{ id: string }>;
 }) {
   const userId = (await params).id;
-  const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/${userId}`
-  );
+  const res = await fetch(`${process.env.BASE_URL}/api/profile/${userId}`);
   const user: IUserDetails = await res?.json();
   const session = await getServerSession(authOptions);
   const currentUser = session?.user?.id as string;
@@ -65,10 +63,17 @@ export default async function Profiles({
 
       {/* user pins */}
       <div className="mt-20 max-w-5xl mx-auto">
-        <Suspense fallback={<h1 className="text-2xl font-semibold text-center mt-30">Loading...</h1>}>
-          <UserPins userId={userId}/>
+        <Suspense
+          fallback={
+            <h1 className="text-2xl font-semibold text-center mt-30">
+              Loading...
+            </h1>
+          }
+        >
+          <UserPins userId={userId} />
         </Suspense>
       </div>
     </div>
   );
 }
+

@@ -7,7 +7,7 @@ export default async function EditProfile() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id;
   const res = await fetch(
-    `${process.env.NEXT_PUBLIC_BASE_URL}/api/profile/${userId}`
+    `${process.env.BASE_URL}/api/profile/${userId}`
   );
   const user = await res?.json();
 

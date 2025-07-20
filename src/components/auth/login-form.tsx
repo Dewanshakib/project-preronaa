@@ -134,7 +134,7 @@ function LoginForm() {
       <CardFooter>
         <div className="text-sm font-medium mx-auto -mt-3">
           <span className="text-black/80">
-            Don't have an account?
+            {"Don't"} have an account?
             <Link
               className="underline font-semibold text-black"
               href={"/register"}

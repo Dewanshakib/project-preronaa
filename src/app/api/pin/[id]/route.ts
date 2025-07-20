@@ -18,7 +18,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         return NextResponse.json(pins, { status: 200 })
 
-    } catch (error: unknown) {
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
         return NextResponse.json({ error: "Server error occured" }, { status: 500 })
 
     }
@@ -47,8 +50,11 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
         return NextResponse.json({ message: "Pin deleted successfully" }, { status: 200 })
 
-    } catch (error: unknown) {
-        return NextResponse.json({ error: error || "Server error occured" }, { status: 500 })
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+        return NextResponse.json({ error: "Server error occured" }, { status: 500 })
 
     }
 }

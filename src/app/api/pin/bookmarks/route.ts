@@ -9,14 +9,14 @@ export async function POST(request: NextRequest) {
         const { userId, pinId } = await request.json()
 
         if (!userId) {
-            return NextResponse.json({ error: "No user id found" }, { status: 400 })
+            return NextResponse.json({ message: "No user id found" }, { status: 400 })
         }
 
         await connectToDatabase()
 
         const user = await User.findById(userId) as IUser
         if (!user) {
-            return NextResponse.json({ error: "No user found" }, { status: 400 })
+            return NextResponse.json({ message: "No user found" }, { status: 400 })
         }
 
         if (user.bookmarks?.includes(pinId)) {
@@ -27,9 +27,12 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ message: "You bookmarked this pin" }, { status: 200 })
         }
 
-        
+
 
     } catch (error) {
-        return NextResponse.json({ error: "Server error while bookmarking the pin!" }, { status: 400 })
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+        return NextResponse.json({ error: "Server error occured" }, { status: 500 })
     }
 }

@@ -1,4 +1,3 @@
-
 import DeletePin from "@/components/pin/delete-pin";
 import PinBookmark from "@/components/pin/pin-bookmark";
 import UserLikeDislikeButton from "@/components/pin/pin-like-dislike-btn";
@@ -24,10 +23,11 @@ export default async function Pin({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const pinId = (await params).id;
+
+  const { id } = await params;
 
   // fetching pin
-  const resPin = await fetch(`${process.env.BASE_URL}/api/pin/${pinId}`);
+  const resPin = await fetch(`${process.env.BASE_URL}/api/pin/${id}`);
   const pin: IPinDetails = await resPin?.json();
 
   // getting session
@@ -42,14 +42,14 @@ export default async function Pin({
 
   // fetching pin comments
   const resComment = await fetch(
-    `${process.env.BASE_URL}/api/pin/${pinId}/comment/all`
+    `${process.env.BASE_URL}/api/pin/${id}/comment/all`
   );
   const comments: ICommentDetails[] = await resComment?.json();
 
   // console.log(comments)
 
   return (
-      <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col my-8">
+    <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col my-8">
       <CardHeader>
         <div className="flex items-start justify-between">
           <div className="">
@@ -83,7 +83,7 @@ export default async function Pin({
           </div>
           {pin.creator._id === currentUser && (
             <div className="flex items-center gap-3">
-              <Link href={`/pin/edit/${pinId}`}>
+              <Link href={`/pin/edit/${id}`}>
                 <Button variant={"outline"}>
                   <SquarePen className="size-4" />
                 </Button>
@@ -130,7 +130,7 @@ export default async function Pin({
           <PinBookmark
             userId={currentUser}
             pinId={pin._id}
-            bookmarkInfo={user.bookmarks.includes(pinId)}
+            bookmarkInfo={user.bookmarks.includes(id)}
           />
         </div>
       </CardContent>
@@ -145,6 +145,6 @@ export default async function Pin({
         )}
       </CardFooter>
     </Card>
-
   );
 }
+

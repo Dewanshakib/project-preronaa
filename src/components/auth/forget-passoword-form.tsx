@@ -38,13 +38,13 @@ function ForgetPasswordForm() {
 
       const result = await res?.json();
       if (!res.ok) {
-        toast.error(result.error);
+        toast.error(result.message);
         return;
       }
       toast.success(result.message);
       router.push("/reset-password");
     } catch (error) {
-      throw error;
+      console.log(error)
     }
   };
 

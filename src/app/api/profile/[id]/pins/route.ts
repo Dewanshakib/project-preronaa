@@ -11,10 +11,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         const category = request.nextUrl.searchParams.get("category")
         // console.log(category)
 
-        let userPins;
-
+    
         if (!userId) {
-            return NextResponse.json({ error: "No user id found!" }, { status: 400 })
+            return NextResponse.json({ message: "No user id found!" }, { status: 400 })
         }
 
         await connectToDatabase()
@@ -22,10 +21,10 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         // }
 
 
-        userPins = await Pin.find({ creator: userId }).sort({createdAt:-1})
+        const userPins = await Pin.find({ creator: userId }).sort({ createdAt: -1 })
 
         if (!userPins) {
-            return NextResponse.json({ error: "No pins found" }, { status: 400 })
+            return NextResponse.json({ message: "No pins found" }, { status: 400 })
 
         }
 
@@ -34,14 +33,17 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         if (category === "bookmarks") {
             const user = await User.findById(userId) as IUser
             const userBookmarkedPinIds = user.bookmarks // array of ids 
-            const bookmarkedPins = await Pin.find({ _id: { $in: userBookmarkedPinIds } }).sort({createdAt:-1})
+            const bookmarkedPins = await Pin.find({ _id: { $in: userBookmarkedPinIds } }).sort({ createdAt: -1 })
             // console.log(bookmarkedPins)
             return NextResponse.json(bookmarkedPins, { status: 200 })
         }
 
         return NextResponse.json(userPins, { status: 200 })
     } catch (error) {
-        return NextResponse.json({ error: "Server error occured while getting user pins" }, { status: 500 })
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+        return NextResponse.json({ error: "Server error occured" }, { status: 500 })
     }
 
 }

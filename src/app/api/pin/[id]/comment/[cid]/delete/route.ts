@@ -12,7 +12,7 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
 
         const comment = await Comment.findById(commentId)
         if (!comment) {
-            return NextResponse.json({ error: "No comment found with this id" }, { status: 400 })
+            return NextResponse.json({ message: "No comment found with this id" }, { status: 400 })
         }
 
         await Comment.findByIdAndDelete(commentId)
@@ -20,6 +20,9 @@ export async function DELETE(request: NextRequest, { params }: { params: Promise
         return NextResponse.json({ message: "Comment deleted successfully" }, { status: 200 })
 
     } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
         return NextResponse.json({ error: "Server error occured" }, { status: 500 })
     }
 }

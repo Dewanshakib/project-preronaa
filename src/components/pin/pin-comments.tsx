@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, useState } from "react";
+import React, { useState } from "react";
 import { Button } from "../ui/button";
 import { ICommentDetails } from "@/types/types";
 import CommentCard from "./comment-card";

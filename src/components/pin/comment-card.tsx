@@ -1,7 +1,8 @@
 import Image from "next/image";
-import React, { FormEvent } from "react";
+import React from "react";
 import { ICommentDetails } from "@/types/types";
 import PinCommentDeleteBtn from "./pin-comment-delete";
+import Link from "next/link";
 
 function CommentCard({
   comment,
@@ -17,13 +18,15 @@ function CommentCard({
         <div className="flex items-center gap-2">
           {comment.creator.avater ? (
             <div className="w-5 h-5 relative rounded-full overflow-hidden">
-              <Image
+              <Link href={`/profile/${comment.creator._id}`}>
+                <Image
                 src={comment.creator.avater}
                 fill
                 loading="lazy"
                 alt="avater photo"
                 className="object-cover"
               />
+              </Link>
             </div>
           ) : (
             <div className="w-5 h-5 bg-gray-300 rounded-full grid place-items-center">

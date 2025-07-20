@@ -1,5 +1,5 @@
 "use client";
-import React, { ChangeEvent, useEffect, useRef, useState } from "react";
+import React, { ChangeEvent, useRef, useState } from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
 import { ChevronLeft } from "lucide-react";
@@ -63,7 +63,7 @@ function EditProfileForm({ userDetails }: { userDetails: IUserDetails }) {
       const result = await res.json();
 
       if (!res.ok) {
-        toast.error(result?.error || "Something went wrong!");
+        toast.error(result.message);
         return;
       }
 

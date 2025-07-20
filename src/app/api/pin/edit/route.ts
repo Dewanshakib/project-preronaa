@@ -20,14 +20,14 @@ export async function PUT(request: NextRequest) {
         const parsed = editPinSchema.safeParse(userInput)
 
         if (!parsed.success) {
-            return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 })
+            return NextResponse.json({ message: parsed.error.flatten().fieldErrors }, { status: 400 })
         }
 
         await connectToDatabase()
 
         const pin = await Pin.findById(pinId) as IPin
         if (!pin) {
-            return NextResponse.json({ error: "No pin found" }, { status: 400 });
+            return NextResponse.json({ message: "No pin found" }, { status: 400 });
         }
 
         if (image) {
@@ -51,7 +51,7 @@ export async function PUT(request: NextRequest) {
                     pin.photoUrl = cloud.secure_url
                     pin.photoId = cloud.public_id
                 } else {
-                    return NextResponse.json({ error: "Error while uploading to cloudinary" }, { status: 400 })
+                    return NextResponse.json({ message: "Error while uploading to cloudinary" }, { status: 400 })
                 }
             }
         }
@@ -62,7 +62,10 @@ export async function PUT(request: NextRequest) {
 
 
         return NextResponse.json({ message: "Pin updated successfully" }, { status: 201 })
-    } catch (error: any) {
-        return NextResponse.json({ error: error.error }, { status: 500 })
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+        return NextResponse.json({ error: "Server error occured" }, { status: 500 })
     }
 }

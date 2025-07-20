@@ -58,7 +58,7 @@ function CreatePinForm({ creatorId }: { creatorId: string }) {
 
       const result = await res?.json();
       if (!res.ok) {
-        toast.error(result.error || "Something went wrong");
+        toast.error(result.message);
         return;
       }
 

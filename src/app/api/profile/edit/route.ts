@@ -13,7 +13,7 @@ export async function PUT(request: NextRequest) {
         const userId = formData.get("userId") as string | null;
 
         if (!userId) {
-            return NextResponse.json({ error: "User ID is missing" }, { status: 400 });
+            return NextResponse.json({ message: "User ID is missing" }, { status: 400 });
         }
 
         const userInput = {
@@ -23,14 +23,14 @@ export async function PUT(request: NextRequest) {
 
         const parsed = editProfileSchema.safeParse(userInput);
         if (!parsed.success) {
-            return NextResponse.json({ error: parsed.error.flatten().fieldErrors }, { status: 400 });
+            return NextResponse.json({ message: parsed.error.flatten().fieldErrors }, { status: 400 });
         }
 
         await connectToDatabase()
 
         const user = await User.findById(userId) as IUser;
         if (!user) {
-            return NextResponse.json({ error: "No user found" }, { status: 400 });
+            return NextResponse.json({ message: "No user found" }, { status: 400 });
         }
 
         const image = formData.get("avater") as File | undefined
@@ -56,7 +56,7 @@ export async function PUT(request: NextRequest) {
                     user.avater = cloud.secure_url
                     user.avaterId = cloud.public_id
                 } else {
-                    return NextResponse.json({ error: "Error while uploading to cloudinary" }, { status: 400 })
+                    return NextResponse.json({ message: "Error while uploading to cloudinary" }, { status: 400 })
                 }
             }
         }
@@ -68,8 +68,11 @@ export async function PUT(request: NextRequest) {
         await user.save();
 
         return NextResponse.json({ message: "Profile updated successfully" }, { status: 201 });
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message || "Something went wrong" }, { status: 500 });
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+        return NextResponse.json({ error: "Something went wrong" }, { status: 500 });
 
     }
 }

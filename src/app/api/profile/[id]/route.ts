@@ -12,11 +12,14 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         const user = await User.findById(id).select("-password") as IUser
         if (!user) {
-            return NextResponse.json({ error: "No user found with this id" }, { status: 400 })
+            return NextResponse.json({ message: "No user found with this id" }, { status: 400 })
         }
 
         return NextResponse.json(user, { status: 200 })
-    } catch (error: any) {
-        return NextResponse.json({ error: error.message }, { status: 500 })
+    } catch (error) {
+        if (error instanceof Error) {
+            return NextResponse.json({ error: error.message }, { status: 500 })
+        }
+        return NextResponse.json({ error: "Server error occured" }, { status: 500 })
     }
 }

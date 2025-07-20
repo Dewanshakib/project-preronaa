@@ -22,7 +22,7 @@ function PinCommentDeleteBtn({
 
       const result = await res?.json();
       if (!res?.ok) {
-        toast.error(result.error);
+        toast.error(result.message);
         return;
       }
 

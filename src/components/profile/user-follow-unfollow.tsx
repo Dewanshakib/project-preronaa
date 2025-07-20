@@ -1,5 +1,5 @@
 "use client";
-import React, { FormEvent, use } from "react";
+import React, { FormEvent} from "react";
 import { Button } from "../ui/button";
 import { toast } from "sonner";
 import { useRouter } from "next/navigation";
@@ -28,7 +28,7 @@ function UserFollowUnfollow({
 
       const result = await res?.json();
       if (!res.ok) {
-        toast.error(result.error || "Something went wrong!");
+        toast.error(result.message);
       }
 
       toast.success(result.message);
