@@ -5,16 +5,11 @@ import { connectToDatabase } from "@/lib/db";
 
 export async function GET(request: NextRequest) {
     try {
-        // Extract query params safely with defaults and validation
-        const { searchParams } = new URL(request.url);
-        const pageRaw = searchParams.get("page");
-        const limitRaw = searchParams.get("limit");
+        const params = request.nextUrl.searchParams
+        const current_page = parseInt(params.get("page") as string)
+        const limit = parseInt(params.get("limit") as string)
 
-        // Parse page and limit with sane defaults and boundaries
-        const page = Math.max(1, parseInt(pageRaw || "1")); // page >= 1
-        const limit = Math.min(50, Math.max(1, parseInt(limitRaw || "10"))); // limit between 1 and 50
-
-        const skip = (page - 1) * limit;
+        const skip = ((current_page - 1) * limit);
 
         await connectToDatabase();
 
@@ -29,7 +24,7 @@ export async function GET(request: NextRequest) {
             .limit(limit)
             .lean(); // faster & returns plain JS objects
 
-        return NextResponse.json({ pins, totalPages, page, limit });
+        return NextResponse.json({ pins, total_page: totalPages, current_page: current_page});
 
     } catch (error) {
         if (error instanceof Error) {

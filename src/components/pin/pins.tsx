@@ -9,7 +9,7 @@ function Pins() {
   const [pins, setPins] = useState<IPinDetails[]>([]);
   const [page, setPage] = useState(1);
   const [totalPages, setTotalPages] = useState(1);
-  const limit = 10;
+  const limit = 9;
 
   const fetchPins = async (pageNumber: number) => {
     try {
@@ -19,8 +19,8 @@ function Pins() {
       }
       const data = await res.json();
       setPins(data.pins);
-      setTotalPages(data.totalPages);
-      setPage(pageNumber);
+      setTotalPages(data.total_page);
+      setPage(data.current_page);
     } catch (error) {
       console.error("Failed to fetch pins:", error);
     }
@@ -28,19 +28,10 @@ function Pins() {
 
   useEffect(() => {
     fetchPins(page);
-  }, [page]); // Added page to the dependency array
+  }, [page]);
 
-  const handlePrev = () => {
-    if (page > 1) {
-      setPage(page - 1); // Update page state instead of calling fetch directly
-    }
-  };
+  console.log(pins)
 
-  const handleNext = () => {
-    if (page < totalPages) {
-      setPage(page + 1); // Update page state instead of calling fetch directly
-    }
-  };
 
   return (
     <div>
@@ -50,19 +41,19 @@ function Pins() {
       <div className="flex justify-center items-center mt-6 space-x-4">
         <Button
           disabled={page === 1}
-          onClick={handlePrev}
+          onClick={() => setPage((prev) => prev -1)}
           className={`${page === 1 && "cursor-not-allowed"}`}
         >
           Prev
         </Button>
 
         <span className="text-sm font-medium">
-          Page {page} of {totalPages}
+          Page {page} of {(totalPages)}
         </span>
 
         <Button
           disabled={page === totalPages || totalPages === 0}
-          onClick={handleNext}
+          onClick={() => setPage((prev) => prev + 1)}
           variant={"default"}
           className={`${
             page === totalPages || (totalPages === 0 && "cursor-not-allowed")

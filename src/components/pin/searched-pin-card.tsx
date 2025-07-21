@@ -3,7 +3,7 @@ import Image from "next/image";
 import Link from "next/link";
 import React from "react";
 
-function SearchedPins({ pins }: { pins: IPinDetails[] }) {
+function SearchedPinCard({ pins }: { pins: IPinDetails[] }) {
   // console.log(pins);
   return (
     <div className="mt-5 w-full">
@@ -28,10 +28,9 @@ function SearchedPins({ pins }: { pins: IPinDetails[] }) {
             No pin found
           </h1>
         )}
-
       </div>
     </div>
   );
 }
 
-export default SearchedPins;
+export default SearchedPinCard;

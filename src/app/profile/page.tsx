@@ -1,4 +1,4 @@
-import UserPins from "@/components/pin/user-pins";
+import UserProfilePins from "@/components/profile/user-profile-pins";
 import { Button } from "@/components/ui/button";
 import { authOptions } from "@/lib/authOptions";
 import { IUserDetails } from "@/types/types";
@@ -6,7 +6,7 @@ import { SquarePen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Suspense } from "react";
+import React from "react";
 
 // fetching user
 async function getUserProfile(userId: string) {
@@ -78,15 +78,8 @@ export default async function Profile({
             <Button variant={"outline"}>Bookmarks</Button>
           </Link>
         </div>
-        <Suspense
-          fallback={
-            <h1 className="text-2xl font-semibold text-center mt-30">
-              Loading...
-            </h1>
-          }
-        >
-          <UserPins userId={userId} pinType={pinType} />
-        </Suspense>
+        {/* user all and bookmarks with pagination */}
+        <UserProfilePins pinType={pinType} userId={userId} />
       </div>
     </div>
   );
