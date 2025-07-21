@@ -18,33 +18,55 @@ import React, { Suspense } from "react";
 import AddPinComment from "@/components/pin/add-pin-comment";
 import PinComments from "@/components/pin/pin-comments";
 
+// fetch pin
+async function fetchPins(pinId: string) {
+  // fetching pin
+  const resPin = await fetch(`${process.env.BASE_URL}/api/pin/${pinId}`);
+  const pin = await resPin?.json();
+  return pin;
+}
+
+// fetch user info
+async function fetchUserInfo(userId: string) {
+  const resUser = await fetch(`${process.env.BASE_URL}/api/profile/${userId}`);
+  const user = await resUser?.json();
+  return user;
+}
+
+// fetch comments
+async function fetchComments(pinId: string) {
+  const resComment = await fetch(
+    `${process.env.BASE_URL}/api/pin/${pinId}/comment/all`
+  );
+  const comments = await resComment?.json();
+  return comments;
+}
+
 export default async function Pin({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
-
   const { id } = await params;
-
-  // fetching pin
-  const resPin = await fetch(`${process.env.BASE_URL}/api/pin/${id}`);
-  const pin: IPinDetails = await resPin?.json();
 
   // getting session
   const session = await getServerSession(authOptions);
   const currentUser = session?.user?.id as string;
 
+  // pin
+  const pinPromise = fetchPins(id);
+
   // fetching user info
-  const resUser = await fetch(
-    `${process.env.BASE_URL}/api/profile/${currentUser}`
-  );
-  const user: IUserDetails = await resUser?.json();
+  const userPromise = fetchUserInfo(currentUser);
 
   // fetching pin comments
-  const resComment = await fetch(
-    `${process.env.BASE_URL}/api/pin/${id}/comment/all`
-  );
-  const comments: ICommentDetails[] = await resComment?.json();
+  const commentsPromise = fetchComments(id);
+
+  const [pin, user, comments] = await Promise.all([
+    pinPromise,
+    userPromise,
+    commentsPromise,
+  ]);
 
   // console.log(comments)
 
@@ -147,4 +169,3 @@ export default async function Pin({
     </Card>
   );
 }
-

@@ -8,16 +8,24 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { Suspense } from "react";
 
-export default async function Profile({searchParams}:{searchParams:Promise<{pins:string}>}) {
-  
+// fetching user
+async function getUserProfile(userId: string) {
+  const res = await fetch(`${process.env.BASE_URL}/api/profile/${userId}`);
+
+  const user = await res?.json();
+  return user;
+}
+
+export default async function Profile({
+  searchParams,
+}: {
+  searchParams: Promise<{ pins: string }>;
+}) {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id as string;
-  const res = await fetch(
-    `${process.env.BASE_URL}/api/profile/${userId}`
-  );
-
-  const user: IUserDetails = await res?.json();
-  const pinType = (await searchParams).pins
+  const pinType = (await searchParams).pins;
+  // user profile
+  const user: IUserDetails = await getUserProfile(userId);
 
   return (
     <div className="w-full mt-20 ">
@@ -70,8 +78,14 @@ export default async function Profile({searchParams}:{searchParams:Promise<{pins
             <Button variant={"outline"}>Bookmarks</Button>
           </Link>
         </div>
-        <Suspense fallback={<h1 className="text-2xl font-semibold text-center mt-30">Loading...</h1>}>
-          <UserPins userId={userId} pinType={pinType}/>
+        <Suspense
+          fallback={
+            <h1 className="text-2xl font-semibold text-center mt-30">
+              Loading...
+            </h1>
+          }
+        >
+          <UserPins userId={userId} pinType={pinType} />
         </Suspense>
       </div>
     </div>

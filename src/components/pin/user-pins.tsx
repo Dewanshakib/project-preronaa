@@ -19,10 +19,10 @@ async function UserPins({
   return (
     <div>
       {data && data.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 w-full">
           {data.map((pin, idx) => (
             <div key={idx}>
-              <div className="relative aspect-[16/9] max-w-sm">
+              <div className="relative aspect-[16/9] w-full">
                 <Link href={`/pin/${pin._id}`}>
                   <Image
                     alt="pin photo"

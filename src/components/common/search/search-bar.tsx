@@ -14,9 +14,14 @@ function SearchBar() {
 
   const submitHandler = () => {
     if (searchValue.trim()) {
-      router.push(`/search?query=${encodeURIComponent(searchValue.trim())}`);
+      router.push(
+        `/search?query=${encodeURIComponent(
+          searchValue.trim()
+        )}`
+      );
       setSearchValue("");
-      setIsOpen(!isOpen)
+      setIsOpen(!isOpen);
+      router.refresh()
     }
   };
 
@@ -74,7 +79,7 @@ function SearchBar() {
               className="mb-2.5"
               onChange={(e) => setSearchValue(e.target.value)}
             />
-            <Button onClick={submitHandler} className="w-full">
+            <Button onClick={submitHandler}>
               Find
             </Button>
           </div>

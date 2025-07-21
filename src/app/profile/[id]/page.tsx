@@ -6,16 +6,24 @@ import { getServerSession } from "next-auth";
 import Image from "next/image";
 import React, { Suspense } from "react";
 
+// fetch user
+async function getUser(userId: string) {
+  const res = await fetch(`${process.env.BASE_URL}/api/profile/${userId}`);
+  const user = await res?.json();
+  return user;
+}
+
 export default async function Profiles({
   params,
 }: {
   params: Promise<{ id: string }>;
 }) {
   const userId = (await params).id;
-  const res = await fetch(`${process.env.BASE_URL}/api/profile/${userId}`);
-  const user: IUserDetails = await res?.json();
+
   const session = await getServerSession(authOptions);
   const currentUser = session?.user?.id as string;
+
+  const user: IUserDetails = await getUser(userId);
 
   // console.log(user.avater)
 
@@ -62,7 +70,7 @@ export default async function Profiles({
       </div>
 
       {/* user pins */}
-      <div className="mt-20 max-w-5xl mx-auto">
+      <div className="mt-20 max-w-5xl mx-auto w-full">
         <Suspense
           fallback={
             <h1 className="text-2xl font-semibold text-center mt-30">
@@ -76,4 +84,3 @@ export default async function Profiles({
     </div>
   );
 }
-

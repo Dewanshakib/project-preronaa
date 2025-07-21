@@ -3,9 +3,7 @@ import Pins from "@/components/pin/pins";
 import React, { Suspense } from "react";
 
 export default async function Home() {
-  const data = await getAllPins();
-  // console.log(data);
-
+ 
   return (
     <div className="p-4">
       <Suspense
@@ -13,7 +11,7 @@ export default async function Home() {
           <h1 className="text-2xl font-bold text-center">Loading...</h1>
         }
       >
-        <Pins pins={data} />
+        <Pins />
       </Suspense>
     </div>
   );
