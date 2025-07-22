@@ -1,10 +1,11 @@
-import UserPins from "@/components/pin/user-pins";
+import AllProfilePins from "@/components/profile/all-profile-pins";
 import UserFollowUnfollow from "@/components/profile/user-follow-unfollow";
 import { authOptions } from "@/lib/authOptions";
 import { IUserDetails } from "@/types/types";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
-import React, { Suspense } from "react";
+import { notFound } from "next/navigation";
+import React from "react";
 
 // fetch user
 async function getUser(userId: string) {
@@ -25,7 +26,7 @@ export default async function Profiles({
 
   const user: IUserDetails = await getUser(userId);
 
-  // console.log(user.avater)
+  if (!user || !user._id || !userId) return notFound();
 
   return (
     <div className="w-full mt-20 ">
@@ -69,17 +70,8 @@ export default async function Profiles({
         </div>
       </div>
 
-      {/* user pins */}
-      <div className="mt-20 max-w-5xl mx-auto w-full">
-        <Suspense
-          fallback={
-            <h1 className="text-2xl font-semibold text-center mt-30">
-              Loading...
-            </h1>
-          }
-        >
-          <UserPins userId={userId} />
-        </Suspense>
+      <div className="mt-20 max-w-5xl mx-auto">
+        <AllProfilePins userId={user._id} />
       </div>
     </div>
   );

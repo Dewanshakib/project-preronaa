@@ -1,10 +1,12 @@
-import SearchedPinList from '@/components/pin/searchd-pin-list'
-import React from 'react'
+import SearchedPinList from "@/components/pin/searchd-pin-list";
+import React, { Suspense } from "react";
 
 export default function Search() {
   return (
     <div>
-      <SearchedPinList/>
+      <Suspense>
+        <SearchedPinList />
+      </Suspense>
     </div>
-  )
+  );
 }

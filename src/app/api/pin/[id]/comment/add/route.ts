@@ -2,11 +2,16 @@ import { connectToDatabase } from "@/lib/db";
 import Comment from "@/models/Comment";
 import Pin from "@/models/Pin";
 import User from "@/models/User";
+import isValidated from "@/utils/isValidated";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export async function POST(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
+
+        if (!await isValidated()) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
+        }
 
         const { userId, comment } = await request.json()
         const pinId = (await params).id as string

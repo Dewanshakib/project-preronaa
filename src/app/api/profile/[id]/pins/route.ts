@@ -1,12 +1,18 @@
 import { connectToDatabase } from "@/lib/db";
 import Pin from "@/models/Pin";
 import User, { IUser } from "@/models/User";
+import isValidated from "@/utils/isValidated";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 
     try {
+
+        if (!await isValidated()) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
+        }
+
         const userId = (await params).id
         const category = request.nextUrl.searchParams.get("category")
         const current_page = parseInt(request.nextUrl.searchParams.get("page") as string)
@@ -27,8 +33,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
         // }
 
-
-        const userPins = await Pin.find({ creator: userId }).sort({ createdAt: -1 }).skip(skip).limit(limit)
+        const allPinsCount = await Pin.find({ creator: userId }).countDocuments({})
+        const userPins = await Pin.find({ creator: userId })
+            .sort({ createdAt: -1 })
+            .skip(skip)
+            .limit(limit)
+            .lean();
 
         if (!userPins) {
             return NextResponse.json({ message: "No pins found" }, { status: 400 })
@@ -40,15 +50,15 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         if (category === "bookmarks") {
             const user = await User.findById(userId) as IUser
             const userBookmarkedPinIds = user.bookmarks // array of ids 
-            const bookmarkedPins = await Pin.find({ _id: { $in: userBookmarkedPinIds } }).sort({ createdAt: -1 }).skip(skip).limit(limit)
-
-            const total_page = Math.ceil((bookmarkedPins.length / limit))
+            const bookmarkedPinCount = await Pin.find({ _id: { $in: userBookmarkedPinIds } }).countDocuments({})
+            const bookmarkedPins = await Pin.find({ _id: { $in: userBookmarkedPinIds } }).skip(skip).limit(limit).lean()
+            const total_page = Math.ceil((bookmarkedPinCount / limit))
 
             // console.log(bookmarkedPins)
             return NextResponse.json({ pins: bookmarkedPins, total_page, current_page }, { status: 200 })
         }
 
-        const total_page = Math.ceil((userPins.length / limit))
+        const total_page = Math.ceil((allPinsCount / limit))
 
         return NextResponse.json({ pins: userPins, total_page, current_page }, { status: 200 })
     } catch (error) {

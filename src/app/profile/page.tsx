@@ -16,19 +16,14 @@ async function getUserProfile(userId: string) {
   return user;
 }
 
-export default async function Profile({
-  searchParams,
-}: {
-  searchParams: Promise<{ pins: string }>;
-}) {
+export default async function Profile() {
   const session = await getServerSession(authOptions);
   const userId = session?.user?.id as string;
-  const pinType = (await searchParams).pins;
   // user profile
   const user: IUserDetails = await getUserProfile(userId);
 
   return (
-    <div className="w-full mt-20 ">
+    <div className="w-full mt-10 ">
       <div className="max-w-md w-full mx-auto md:flex-row items-center flex flex-col">
         {/* user avater */}
         <div className="w-40 h-40 mx-auto relative rounded-full overflow-hidden">
@@ -70,16 +65,9 @@ export default async function Profile({
 
       {/* user pins */}
       <div className="mt-20 max-w-5xl mx-auto">
-        <div className="flex items-center gap-1 mb-3">
-          <Link href={`${process.env.BASE_URL}/profile?pins=all`}>
-            <Button variant={"outline"}>All</Button>
-          </Link>
-          <Link href={`${process.env.BASE_URL}/profile?pins=bookmarks`}>
-            <Button variant={"outline"}>Bookmarks</Button>
-          </Link>
-        </div>
+        
         {/* user all and bookmarks with pagination */}
-        <UserProfilePins pinType={pinType} userId={userId} />
+        <UserProfilePins userId={userId} />
       </div>
     </div>
   );

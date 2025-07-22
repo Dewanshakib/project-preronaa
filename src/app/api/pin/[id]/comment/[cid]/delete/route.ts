@@ -1,11 +1,17 @@
 import { connectToDatabase } from "@/lib/db";
 import Comment from "@/models/Comment";
+import isValidated from "@/utils/isValidated";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ cid: string }> }) {
     try {
+
+        if (!await isValidated()) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
+        }
+
         const commentId = (await params).cid as string
 
         await connectToDatabase()

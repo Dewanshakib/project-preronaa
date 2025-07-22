@@ -1,16 +1,17 @@
-"use client";
+"use client"
 import React from "react";
 import logo from "@/assets/preronaa_logo.png";
 import Link from "next/link";
 import Image from "next/image";
 import { CirclePlus, CircleUser } from "lucide-react";
 import { Button } from "../../ui/button";
-import { signOut, useSession } from "next-auth/react";
 import DropDownMenuNavbar from "./dropdown-menu";
 import SearchBar from "../search/search-bar";
+import SignOutBtn from "@/components/auth/signout-btn";
+import { useSession } from "next-auth/react";
 
 function Navbar() {
-  const { data: session } = useSession();
+  const {data:session} = useSession()  
   // console.log(session)
 
   return (
@@ -59,11 +60,8 @@ function Navbar() {
                   <CirclePlus className="md:size-4 size-5" />
                 </Link>
               </Button>
-              <form action={async () => await signOut()}>
-                <Button type="submit" variant={"outline"}>
-                  Logout
-                </Button>
-              </form>
+              {/* sign out btn */}
+              <SignOutBtn/>
             </>
           ) : (
             <>

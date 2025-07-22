@@ -1,11 +1,17 @@
 import { connectToDatabase } from "@/lib/db";
 import Pin from "@/models/Pin";
+import isValidated from "@/utils/isValidated";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 
 export async function GET(request: NextRequest) {
     try {
+
+        if (!await isValidated()) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
+        }
+
         const query = request.nextUrl.searchParams.get("query") as string
         const current_page = parseInt(request.nextUrl.searchParams.get("page") as string)
         const limit = parseInt(request.nextUrl.searchParams.get("limit") as string)

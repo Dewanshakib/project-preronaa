@@ -9,7 +9,6 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { authOptions } from "@/lib/authOptions";
-import { ICommentDetails, IPinDetails, IUserDetails } from "@/types/types";
 import { SquarePen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
@@ -17,6 +16,7 @@ import Link from "next/link";
 import React, { Suspense } from "react";
 import AddPinComment from "@/components/pin/add-pin-comment";
 import PinComments from "@/components/pin/pin-comments";
+import { notFound } from "next/navigation";
 
 // fetch pin
 async function fetchPins(pinId: string) {
@@ -67,6 +67,10 @@ export default async function Pin({
     userPromise,
     commentsPromise,
   ]);
+
+  if (!pin || pin.error || !pin._id) {
+    notFound(); // Redirect to not-found page
+  }
 
   // console.log(comments)
 

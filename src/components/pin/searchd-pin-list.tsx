@@ -5,6 +5,7 @@ import { IPinDetails } from "@/types/types";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
 import SearchedPinCard from "./searched-pin-card";
+import Loading from "../common/loader/loading";
 
 export default function SearchedPinList() {
   const paramas = useSearchParams();
@@ -36,12 +37,9 @@ export default function SearchedPinList() {
     fetchResults(page);
   }, [page, query]);
 
-  if (loading)
-    return (
-      <h1 className="text-5xl font-semibold text-center mt-55">Loading...</h1>
-    );
+  if (loading) return <Loading/>
 
-    console.log(pins)
+    // console.log(pins)
 
   return (
     <div className="p-3.5">

@@ -5,10 +5,16 @@ import { editProfileSchema } from "@/lib/schema";
 import { generateContent } from "@/utils/generateContent";
 import cloudinary from "@/lib/cloudinary";
 import { connectToDatabase } from "@/lib/db";
+import isValidated from "@/utils/isValidated";
 
 
 export async function PUT(request: NextRequest) {
     try {
+
+        if (!await isValidated()) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
+        }
+
         const formData = await request.formData();
         const userId = formData.get("userId") as string | null;
 

@@ -2,9 +2,15 @@ import { NextResponse } from "next/server";
 import type { NextRequest } from "next/server";
 import Pin from "@/models/Pin";
 import { connectToDatabase } from "@/lib/db";
+import isValidated from "@/utils/isValidated";
 
 export async function GET(request: NextRequest) {
     try {
+
+       if (!await isValidated()) {
+            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
+        }
+
         const params = request.nextUrl.searchParams
         const current_page = parseInt(params.get("page") as string)
         const limit = parseInt(params.get("limit") as string)
@@ -19,6 +25,7 @@ export async function GET(request: NextRequest) {
 
         // Fetch pins sorted by creation date descending, paginated properly
         const pins = await Pin.find({})
+            .select(['-like','-photoId'])
             .sort({ createdAt: -1 }) // sort newest first
             .skip(skip)
             .limit(limit)
