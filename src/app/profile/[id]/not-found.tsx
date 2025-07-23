@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 
 export default function NotFoundPage() {
@@ -19,3 +20,15 @@ export default function NotFoundPage() {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "User Not Found",
+  description: "This user might have deleted their profile or never existed.",
+  openGraph: {
+    title: "404 - User Not Found",
+    description: "No user found with this ID.",
+    url: "/user/not-found",
+    siteName: "Preronaa",
+    type: "profile",
+  },
+};

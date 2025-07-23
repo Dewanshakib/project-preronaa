@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { authOptions } from "@/lib/authOptions";
 import { IUserDetails } from "@/types/types";
 import { SquarePen } from "lucide-react";
+import { Metadata } from "next";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -72,3 +73,16 @@ export default async function Profile() {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Your Profile",
+  description:
+    "Manage your pins, followers, and account settings from your profile page.",
+  openGraph: {
+    title: "Preronaa - Profile",
+    description: "All your pins and social activity in one place.",
+    url: "/profile",
+    siteName: "Preronaa",
+    type: "profile",
+  },
+};

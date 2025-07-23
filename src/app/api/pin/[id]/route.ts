@@ -3,24 +3,20 @@ import { NextResponse } from "next/server";
 import Pin, { IPin } from "@/models/Pin";
 import { connectToDatabase } from "@/lib/db";
 import cloudinary from "@/lib/cloudinary";
-import isValidated from "@/utils/isValidated";
+
 
 
 export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
     try {
-
-        if (!await isValidated()) {
-                    return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
-        }
-
         const id = (await params).id
 
         await connectToDatabase()
 
+    
         const pins = await Pin.findById(id).populate({
             path: 'creator',
-            select: '-password'
-        })
+            select: ['-password','-follower','-bookmarks','-avaterId','-following'],
+        }).select('-photoId').lean()
 
         return NextResponse.json(pins, { status: 200 })
 
@@ -36,10 +32,6 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 
     try {
-
-        if (!await isValidated()) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
-        }
 
         const pinId = (await params).id
 

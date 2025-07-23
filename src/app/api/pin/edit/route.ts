@@ -1,18 +1,14 @@
+
 import cloudinary from "@/lib/cloudinary";
 import { connectToDatabase } from "@/lib/db";
 import { editPinSchema } from "@/lib/schema";
 import Pin, { IPin } from "@/models/Pin";
 import { generateContent } from "@/utils/generateContent";
-import isValidated from "@/utils/isValidated";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
 export async function PUT(request: NextRequest) {
     try {
-
-       if (!await isValidated()) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
-        }
 
         const formData = await request.formData()
         const image = formData.get("image") as File | undefined

@@ -1,7 +1,7 @@
+
 import { connectToDatabase } from "@/lib/db";
 import Pin from "@/models/Pin";
 import User, { IUser } from "@/models/User";
-import isValidated from "@/utils/isValidated";
 import type { NextRequest } from "next/server";
 import { NextResponse } from "next/server";
 
@@ -9,20 +9,12 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
 
     try {
 
-        if (!await isValidated()) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
-        }
-
         const userId = (await params).id
         const category = request.nextUrl.searchParams.get("category")
         const current_page = parseInt(request.nextUrl.searchParams.get("page") as string)
         const limit = parseInt(request.nextUrl.searchParams.get("limit") as string)
-        // console.log(category)
-        // console.log(page)
-        // console.log(limit)
 
         const skip = ((current_page - 1) * limit)
-        // console.log(skip)
 
 
         if (!userId) {

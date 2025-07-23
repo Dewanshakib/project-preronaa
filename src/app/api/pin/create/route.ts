@@ -5,19 +5,13 @@ import { createPinSchema } from "@/lib/schema";
 import { generateContent } from "@/utils/generateContent";
 import cloudinary from "@/lib/cloudinary";
 import { connectToDatabase } from "@/lib/db";
-import isValidated from "@/utils/isValidated";
 
 export async function POST(request: NextRequest) {
     try {
-
-        if (!await isValidated()) {
-            return NextResponse.json({ message: "Unauthorized" }, { status: 400 })
-        }
-
         const formData = await request.formData()
         const image = formData.get("image") as File
         const creatorId = formData.get("creatorId")
-
+        
         const userInput = {
             caption: formData.get("caption") as string,
         }
@@ -33,6 +27,8 @@ export async function POST(request: NextRequest) {
         const buffer = Buffer.from(bytes)
 
         await connectToDatabase()
+
+
 
         // image parsed
         const imageContent = generateContent(image, buffer)

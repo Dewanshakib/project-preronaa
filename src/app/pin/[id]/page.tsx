@@ -173,3 +173,22 @@ export default async function Pin({
     </Card>
   );
 }
+
+export const generateMetadata = async ({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) => {
+  const id = (await params).id;
+  return {
+    title: `View Pin`,
+    description: `See full details of the pin with ID: ${id}. Like, bookmark or share it.`,
+    openGraph: {
+      title: "Pin Details",
+      description: "Engage with unique pins on Preronaa.",
+      url: `/pin/${id}`,
+      siteName: "Preronaa",
+      type: "article",
+    },
+  };
+};

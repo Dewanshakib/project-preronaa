@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 
 export default function NotFound() {
@@ -19,3 +20,15 @@ export default function NotFound() {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Page Not Found",
+  description: `Oops! The page you’re looking for doesn’t exist.`,
+  openGraph: {
+    title: "404 - Page Not Found",
+    description: `We couldn’t find the page you were looking for. Try heading back to the homepage.`,
+    url: "/404",
+    siteName: "Preronaa",
+    type: "website",
+  },
+};

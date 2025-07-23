@@ -1,3 +1,4 @@
+import { Metadata } from "next";
 import Link from "next/link";
 
 export default function NotFoundPage() {
@@ -11,7 +12,7 @@ export default function NotFoundPage() {
         </p>
         <Link
           href="/"
-          className="inline-block px-6 py-2 border border-black text-black hover:bg-black hover:text-white transition rounded-md"
+          className="inline-block px-6 py-2 border-2 border-black text-black hover:bg-black hover:text-white transition rounded-md font-medium"
         >
           Go Back Home
         </Link>
@@ -19,3 +20,15 @@ export default function NotFoundPage() {
     </div>
   );
 }
+
+export const metadata: Metadata = {
+  title: "Pin Not Found • Preronaa",
+  description: "Oops! This pin might've been deleted or never existed.",
+  openGraph: {
+    title: "404 - Pin Not Found",
+    description: "The pin you're looking for isn't available.",
+    url: "/pin/not-found",
+    siteName: "Preronaa",
+    type: "website",
+  },
+};

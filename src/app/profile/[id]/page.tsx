@@ -1,11 +1,14 @@
 import AllProfilePins from "@/components/profile/all-profile-pins";
 import UserFollowUnfollow from "@/components/profile/user-follow-unfollow";
 import { authOptions } from "@/lib/authOptions";
+import { connectToDatabase } from "@/lib/db";
+import User from "@/models/User";
 import { IUserDetails } from "@/types/types";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import { notFound } from "next/navigation";
 import React from "react";
+import type { Metadata } from "next";
 
 // fetch user
 async function getUser(userId: string) {
@@ -75,4 +78,38 @@ export default async function Profiles({
       </div>
     </div>
   );
+}
+
+// SSG Paths
+export async function generateStaticParams() {
+  await connectToDatabase();
+  const users = await User.find();
+
+  return users.map((user) => ({
+    id: user._id.toString(),
+  }));
+}
+
+export async function generateMetadata({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}): Promise<Metadata> {
+  const id = (await params).id;
+  const res = await fetch(
+    `${process.env.BASE_URL}/api/profile/${id.toString()}`
+  );
+  const user = await res.json();
+
+  return {
+    title: `${user.name}`,
+    description: `See pins created by ${user.name}. Follow for more creative content.`,
+    openGraph: {
+      title: `${user.name}'s Profile`,
+      description: `Check out the profile of ${user.name} on Preronaa.`,
+      url: `/user/${id}`,
+      siteName: "Preronaa",
+      type: "profile",
+    },
+  };
 }
