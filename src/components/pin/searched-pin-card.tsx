@@ -24,7 +24,7 @@ function SearchedPinCard({ pins }: { pins: IPinDetails[] }) {
             </div>
           ))
         ) : (
-          <h1 className="text-2xl md:text-4xl font-medium  w-full mx-auto text-red-500">
+          <h1 className="text-2xl md:text-4xl  w-full mx-auto text-gray-700 font-bold mt-5">
             No pin found
           </h1>
         )}

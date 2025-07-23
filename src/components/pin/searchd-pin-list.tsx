@@ -37,34 +37,38 @@ export default function SearchedPinList() {
     fetchResults(page);
   }, [page, query]);
 
-  if (loading) return <Loading/>
+  if (loading) return <Loading />;
 
-    // console.log(pins)
+  // console.log(pins)
 
   return (
     <div className="p-3.5">
       <h1 className="font-medium">You searhed for: {query}</h1>
+      {/* searched pins */}
       <SearchedPinCard pins={pins} />
-      <div className="flex flex-row gap-2 mt-10 justify-center">
-        <Button
-          onClick={() => setPage((prev) => prev - 1)}
-          disabled={page === 1 && true}
-          className={`${page === 1 && "opacity-50"}`}
-        >
-          Prev
-        </Button>
-        <span className="text-xl font-medium">
-          {" "}
-          {page} of {totalPage}
-        </span>
-        <Button
-          onClick={() => setPage((prev) => prev + 1)}
-          disabled={page === totalPage && true}
-          className={`${page === totalPage && "opacity-50"}`}
-        >
-          Next
-        </Button>
-      </div>
+      {/* pagination and btns */}
+      {pins && pins.length > 0 && totalPage > 1 && (
+        <div className="flex flex-row gap-2 mt-10 justify-center">
+          <Button
+            onClick={() => setPage((prev) => prev - 1)}
+            disabled={page === 1 && true}
+            className={`${page === 1 && "opacity-50"}`}
+          >
+            Prev
+          </Button>
+          <span className="text-xl font-medium">
+            {" "}
+            {page} of {totalPage}
+          </span>
+          <Button
+            onClick={() => setPage((prev) => prev + 1)}
+            disabled={page === totalPage && true}
+            className={`${page === totalPage && "opacity-50"}`}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 }

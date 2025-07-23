@@ -27,7 +27,7 @@ function PinCard({ pins }: { pins: IPinDetails[] }) {
             </div>
           ))
         ) : (
-          <h1>No pins added yet</h1>
+          <h1 className="text-2xl md:text-4xl font-bold text-gray-700 mt-10">No pins added yet</h1>
         )}
       </div>
     </div>

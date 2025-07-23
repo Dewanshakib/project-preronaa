@@ -40,33 +40,36 @@ function Pins() {
 
   return (
     <div>
+      {/* all pins */}
       <PinCard pins={pins} />
 
       {/* Pagination Controls */}
-      <div className="flex justify-center items-center mt-6 space-x-4">
-        <Button
-          disabled={page === 1}
-          onClick={() => setPage((prev) => prev - 1)}
-          className={`${page === 1 && "cursor-not-allowed"}`}
-        >
-          Prev
-        </Button>
+      {pins && pins.length > 0 && totalPages > 1 && (
+        <div className="flex justify-center items-center mt-6 space-x-4">
+          <Button
+            disabled={page === 1}
+            onClick={() => setPage((prev) => prev - 1)}
+            className={`${page === 1 && "cursor-not-allowed"}`}
+          >
+            Prev
+          </Button>
 
-        <span className="text-sm font-medium">
-          Page {page} of {totalPages}
-        </span>
+          <span className="text-sm font-medium">
+            Page {page} of {totalPages}
+          </span>
 
-        <Button
-          disabled={page === totalPages || totalPages === 0}
-          onClick={() => setPage((prev) => prev + 1)}
-          variant={"default"}
-          className={`${
-            page === totalPages || (totalPages === 0 && "cursor-not-allowed")
-          }`}
-        >
-          Next
-        </Button>
-      </div>
+          <Button
+            disabled={page === totalPages || totalPages === 0}
+            onClick={() => setPage((prev) => prev + 1)}
+            variant={"default"}
+            className={`${
+              page === totalPages || (totalPages === 0 && "cursor-not-allowed")
+            }`}
+          >
+            Next
+          </Button>
+        </div>
+      )}
     </div>
   );
 }
