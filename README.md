@@ -52,6 +52,17 @@ Preronaa is your aesthetic digital pinboard — think Pinterest with a chill twi
 
 ---
 
+# 🔥 Final Vibe
+
+✨ Preronaa isn't just an app — it’s your personal canvas, your moodboard, your content vault.
+Post it, pin it, and let the world follow your aesthetic. 💫
+
+---
+
+💻 Developed by **Dewan Shakib**
+
+---
+
 ## 🔧 Getting Started
 
 ```bash
