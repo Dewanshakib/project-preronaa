@@ -63,7 +63,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={` ${geistMono.variable} antialiased px-4`}>
         <SessionWrapper>
-          <header className="sticky top-0 z-50 bg-white/70 backdrop-blur-md rounded-b-md  py-3 px-4">
+          <header suppressHydrationWarning className="sticky top-0 z-50 bg-white/70 backdrop-blur-md rounded-b-md  py-3 px-4">
             <Navbar />
           </header>
           <div className="py-2">{children}</div>

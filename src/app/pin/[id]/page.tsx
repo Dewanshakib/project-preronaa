@@ -9,7 +9,7 @@ import {
   CardHeader,
 } from "@/components/ui/card";
 import { authOptions } from "@/lib/authOptions";
-import { SquarePen } from "lucide-react";
+import { AlertCircle, SquarePen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
@@ -17,6 +17,8 @@ import React, { Suspense } from "react";
 import AddPinComment from "@/components/pin/add-pin-comment";
 import PinComments from "@/components/pin/pin-comments";
 import { notFound } from "next/navigation";
+import { connectToDatabase } from "@/lib/db";
+import User from "@/models/User";
 
 // fetch pin
 async function fetchPins(pinId: string) {
@@ -24,13 +26,6 @@ async function fetchPins(pinId: string) {
   const resPin = await fetch(`${process.env.BASE_URL}/api/pin/${pinId}`);
   const pin = await resPin?.json();
   return pin;
-}
-
-// fetch user info
-async function fetchUserInfo(userId: string) {
-  const resUser = await fetch(`${process.env.BASE_URL}/api/profile/${userId}`);
-  const user = await resUser?.json();
-  return user;
 }
 
 // fetch comments
@@ -42,7 +37,7 @@ async function fetchComments(pinId: string) {
   return comments;
 }
 
-export default async function Pin({
+export default async function PinPage({
   params,
 }: {
   params: Promise<{ id: string }>;
@@ -53,20 +48,17 @@ export default async function Pin({
   const session = await getServerSession(authOptions);
   const currentUser = session?.user?.id as string;
 
+  await connectToDatabase();
+  const currentUserDetails = await User.findOne({ _id: currentUser });
+  console.log(currentUserDetails);
+
   // pin
   const pinPromise = fetchPins(id);
-
-  // fetching user info
-  const userPromise = fetchUserInfo(currentUser);
 
   // fetching pin comments
   const commentsPromise = fetchComments(id);
 
-  const [pin, user, comments] = await Promise.all([
-    pinPromise,
-    userPromise,
-    commentsPromise,
-  ]);
+  const [pin, comments] = await Promise.all([pinPromise, commentsPromise]);
 
   if (!pin || pin.error || !pin._id) {
     notFound(); // Redirect to not-found page
@@ -107,7 +99,7 @@ export default async function Pin({
               </Link>
             </div>
           </div>
-          {pin.creator._id === currentUser && (
+          {session && session.user && pin.creator._id === currentUser && (
             <div className="flex items-center gap-3">
               <Link href={`/pin/edit/${id}`}>
                 <Button variant={"outline"}>
@@ -120,56 +112,59 @@ export default async function Pin({
         </div>
       </CardHeader>
       <CardContent>
-        <Suspense
-          fallback={
-            <p className="text-2xl font-bold text-center">Loading...</p>
-          }
-        >
-          <div className="relative w-full aspect-[16/9]">
-            <Image
-              src={pin.photoUrl}
-              alt="Awesome Image"
-              fill
-              className="object-cover rounded-lg"
-              loading="lazy"
-            />
-          </div>
-        </Suspense>
-
-        <div className="flex items-start justify-between gap-3 w-full mt-4">
-          <div className="flex gap-1 items-start">
-            {/* like and dislike btn */}
-            <div className="flex items-center flex-col">
-              <UserLikeDislikeButton
-                userId={currentUser}
-                pinId={pin._id}
-                likeInfo={pin.like.includes(currentUser)}
-              />
-              <p className="text-sm font-medium">{pin.like.length}</p>
-            </div>
-
-            {/* Add pin comment section */}
-            <AddPinComment userId={currentUser} pinId={pin._id} />
-          </div>
-
-          {/* bookmark btn */}
-          <PinBookmark
-            userId={currentUser}
-            pinId={pin._id}
-            bookmarkInfo={user.bookmarks.includes(id)}
+        <div className="relative w-full aspect-[16/9]">
+          <Image
+            src={pin.photoUrl}
+            alt="Awesome Image"
+            fill
+            className="object-cover rounded-lg"
+            loading="lazy"
           />
         </div>
-      </CardContent>
-      <CardFooter className="w-full">
-        {/* pin comments */}
-        {comments.length > 0 && (
-          <PinComments
-            userId={currentUser}
-            comments={comments}
-            length={comments.length}
-          />
+
+        {session && session.user ? (
+          <div className="flex items-start justify-between gap-3 w-full mt-4">
+            <div className="flex gap-1 items-start">
+              {/* like and dislike btn */}
+              <div className="flex items-center flex-col">
+                <UserLikeDislikeButton
+                  userId={currentUser}
+                  pinId={pin._id}
+                  likeInfo={pin.like.includes(currentUser)}
+                />
+                <p className="text-sm font-medium">{pin.like.length}</p>
+              </div>
+
+              {/* Add pin comment section */}
+              <AddPinComment userId={currentUser} pinId={pin._id} />
+            </div>
+
+            {/* bookmark btn */}
+            <PinBookmark
+              userId={currentUser}
+              pinId={pin._id}
+              bookmarkInfo={currentUserDetails.bookmarks.includes(id)}
+            />
+          </div>
+        ) : (
+          <div className="mt-3 flex flex-row gap-x-1.5">
+            <AlertCircle color="red"/>{" "}
+            <h1 className="text-red-500 font-medium">You need to login to view more details of this post</h1>
+          </div>
         )}
-      </CardFooter>
+      </CardContent>
+      {session && session.user && (
+        <CardFooter className="w-full">
+          {/* pin comments */}
+          {comments.length > 0 && (
+            <PinComments
+              userId={currentUser}
+              comments={comments}
+              length={comments.length}
+            />
+          )}
+        </CardFooter>
+      )}
     </Card>
   );
 }

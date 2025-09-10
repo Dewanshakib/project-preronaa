@@ -1,6 +1,6 @@
 "use client";
 import { useRouter } from "next/navigation";
-import React, { FormEvent } from "react";
+import React, { FormEvent, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "../ui/button";
 import { Bookmark } from "lucide-react";
@@ -15,9 +15,15 @@ function PinBookmark({
   bookmarkInfo: boolean;
 }) {
   const router = useRouter();
+  const [bookmarked, setBookmarked] = useState(bookmarkInfo);
+  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
+    setBookmarked(!bookmarked);
+    setLoading(true);
+
     try {
       const res = await fetch("/api/pin/bookmarks", {
         method: "POST",
@@ -30,23 +36,27 @@ function PinBookmark({
       const result = await res?.json();
       if (!res.ok) {
         toast.error(result.message);
+        setBookmarked(bookmarkInfo);
+        return;
+      } else {
+        toast.success(result.message);
+        router.refresh();
       }
-
-      toast.success(result.message);
-      router.refresh();
     } catch (error) {
       console.log(error);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <form onSubmit={onSubmit}>
-      {bookmarkInfo ? (
-        <Button type="submit" variant={"ghost"}>
-          <Bookmark className="size-6" fill="black"/>
+      {bookmarked ? (
+        <Button disabled={loading} type="submit" variant={"ghost"}>
+          <Bookmark className="size-6" fill="black" />
         </Button>
       ) : (
-        <Button type="submit" variant={"ghost"}>
+        <Button disabled={loading} type="submit" variant={"ghost"}>
           <Bookmark className="size-6" />
         </Button>
       )}

@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import logo from "@/assets/preronaa_logo.png";
 import Link from "next/link";
@@ -11,12 +11,12 @@ import SignOutBtn from "@/components/auth/signout-btn";
 import { useSession } from "next-auth/react";
 
 function Navbar() {
-  const {data:session} = useSession()  
+  const { data: session } = useSession();
   // console.log(session)
 
   return (
-    <div className={`${!session && "hidden"} relative`}>
-      <div className="flex items-center justify-between">
+    <div suppressHydrationWarning>
+      <div suppressHydrationWarning className="flex items-center justify-between">
         {/* Logo */}
 
         <section className="flex items-center">
@@ -38,11 +38,19 @@ function Navbar() {
         </section>
 
         {/* menu and search btn -> Mobile */}
-        <div className="flex items-center gap-1">
+        <div suppressHydrationWarning className="flex items-center gap-1">
           <SearchBar />
-          <div className="md:hidden">
-            <DropDownMenuNavbar />
-          </div>
+          {session && session.user ? (
+            <div suppressHydrationWarning className="md:hidden">
+              <DropDownMenuNavbar />
+            </div>
+          ) : (
+            <div suppressHydrationWarning className=" md:hidden">
+              <Button>
+                <Link href={"/login"}>Login</Link>
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* navlinks & buttons -> Desktop */}
@@ -61,11 +69,11 @@ function Navbar() {
                 </Link>
               </Button>
               {/* sign out btn */}
-              <SignOutBtn/>
+              <SignOutBtn />
             </>
           ) : (
             <>
-              <Button variant={"outline"}>
+              <Button>
                 <Link href={"/login"}>Login</Link>
               </Button>
             </>
