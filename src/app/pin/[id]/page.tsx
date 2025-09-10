@@ -60,7 +60,7 @@ export default async function PinPage({
 
   const [pin, comments] = await Promise.all([pinPromise, commentsPromise]);
 
-  if (!pin || pin.error || !pin._id) {
+  if (!pin || !pin._id) {
     notFound(); // Redirect to not-found page
   }
 

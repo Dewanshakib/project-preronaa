@@ -53,11 +53,11 @@ function UserLikeDislikeButton({
   return (
     <form onSubmit={onSubmit}>
       {liked ? (
-        <Button disabled={loading} type="submit" variant={"ghost"}>
+        <Button type="submit" variant={"ghost"}>
           <Heart className="size-6" fill="red" color="red" />
         </Button>
       ) : (
-        <Button disabled={loading} type="submit" variant={"ghost"}>
+        <Button type="submit" variant={"ghost"}>
           <Heart className="size-6" />
         </Button>
       )}

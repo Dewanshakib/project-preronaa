@@ -52,11 +52,11 @@ function PinBookmark({
   return (
     <form onSubmit={onSubmit}>
       {bookmarked ? (
-        <Button disabled={loading} type="submit" variant={"ghost"}>
+        <Button  type="submit" variant={"ghost"}>
           <Bookmark className="size-6" fill="black" />
         </Button>
       ) : (
-        <Button disabled={loading} type="submit" variant={"ghost"}>
+        <Button  type="submit" variant={"ghost"}>
           <Bookmark className="size-6" />
         </Button>
       )}
