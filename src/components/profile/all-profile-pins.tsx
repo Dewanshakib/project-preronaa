@@ -30,7 +30,7 @@ function AllProfilePins({ userId }: { userId: string }) {
       }
     };
     fetchUserPins();
-  }, [currentPage]);
+  }, [currentPage,userId]);
 
   // console.log(userPins);
   if (loading) return <UsersPinLoading />;

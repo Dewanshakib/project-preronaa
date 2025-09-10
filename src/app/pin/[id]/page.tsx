@@ -13,7 +13,7 @@ import { AlertCircle, SquarePen } from "lucide-react";
 import { getServerSession } from "next-auth";
 import Image from "next/image";
 import Link from "next/link";
-import React, { Suspense } from "react";
+import React from "react";
 import AddPinComment from "@/components/pin/add-pin-comment";
 import PinComments from "@/components/pin/pin-comments";
 import { notFound } from "next/navigation";

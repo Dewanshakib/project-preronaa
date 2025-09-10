@@ -31,7 +31,7 @@ function UserProfilePins({ userId }: { userId: string }) {
       }
     };
     fetchUserPins();
-  }, [currentPage, pinType]);
+  }, [currentPage, pinType, userId]);
 
   // console.log(userPins);
 
