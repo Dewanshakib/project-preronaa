@@ -17,13 +17,11 @@ function UserLikeDislikeButton({
 }) {
   const router = useRouter();
   const [liked, setLiked] = useState(likeInfo);
-  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setLiked(!liked);
-    setLoading(true);
 
     try {
       const res = await fetch("/api/pin/like&dislike", {
@@ -45,8 +43,6 @@ function UserLikeDislikeButton({
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
     }
   };
 

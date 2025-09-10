@@ -16,13 +16,11 @@ function PinBookmark({
 }) {
   const router = useRouter();
   const [bookmarked, setBookmarked] = useState(bookmarkInfo);
-  const [loading, setLoading] = useState(false);
 
   const onSubmit = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     setBookmarked(!bookmarked);
-    setLoading(true);
 
     try {
       const res = await fetch("/api/pin/bookmarks", {
@@ -44,9 +42,7 @@ function PinBookmark({
       }
     } catch (error) {
       console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   return (
