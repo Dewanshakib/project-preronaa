@@ -3,7 +3,7 @@ import { NextResponse, NextRequest } from "next/server";
 
 export async function middleware(request: NextRequest) {
     const cookie = await cookies();
-    const token = cookie.get("next-auth.session-token")?.value;
+    const token = cookie.get("__Secure-next-auth.session-token")?.value;
 
     const path = request.nextUrl.pathname;
     const isPublicRoute = path === "/" ||
