@@ -19,22 +19,17 @@ import PinComments from "@/components/pin/pin-comments";
 import { notFound } from "next/navigation";
 import { connectToDatabase } from "@/lib/db";
 import User from "@/models/User";
+import Pin from "@/models/Pin";
+import Comment from "@/models/Comment";
 
-// fetch pin
-async function fetchPins(pinId: string) {
-  // fetching pin
-  const resPin = await fetch(`${process.env.BASE_URL}/api/pin/${pinId}`);
-  const pin = await resPin?.json();
-  return pin;
-}
+// SSG
+export async function generateStaticParams() {
+  await connectToDatabase();
+  const users = await Pin.find();
 
-// fetch comments
-async function fetchComments(pinId: string) {
-  const resComment = await fetch(
-    `${process.env.BASE_URL}/api/pin/${pinId}/comment/all`
-  );
-  const comments = await resComment?.json();
-  return comments;
+  return users.map((pin) => ({
+    id: pin._id.toString(),
+  }));
 }
 
 export default async function PinPage({
@@ -44,33 +39,30 @@ export default async function PinPage({
 }) {
   const { id } = await params;
 
-  // getting session
-  const session = await getServerSession(authOptions);
-  const currentUser = session?.user?.id as string;
-
+  // DB connect once
   await connectToDatabase();
-  const currentUserDetails = await User.findOne({ _id: currentUser });
-  console.log(currentUserDetails);
 
-  // pin
-  const pinPromise = fetchPins(id);
+  // session
+  const session = await getServerSession(authOptions);
+  const currentUser = session?.user?.id;
+  console.log(currentUser);
 
-  // fetching pin comments
-  const commentsPromise = fetchComments(id);
+  // direct DB queries instead of fetch
+  const pin = await Pin.findById(id).populate("creator");
+  if (!pin) notFound();
 
-  const [pin, comments] = await Promise.all([pinPromise, commentsPromise]);
-
-  if (!pin || !pin._id) {
-    notFound(); // Redirect to not-found page
-  }
+  const comments = await Comment.find({ pin: id }).populate("user");
+  const currentUserDetails = currentUser
+    ? await User.findById(currentUser)
+    : null;
 
   // console.log(comments)
 
   return (
-    <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col my-8">
+    <Card className="w-full max-w-4xl mx-auto mt-10 flex flex-col">
       <CardHeader>
         <div className="flex items-start justify-between">
-          <div className="">
+          <div>
             <h1 className="font-medium text-xl mb-6">{pin.caption}</h1>
             <div className="flex items-center gap-1.5 mt-2">
               <div className="w-6 h-6 relative rounded-full overflow-hidden">
@@ -78,7 +70,7 @@ export default async function PinPage({
                   <Image
                     fill
                     className="object-cover"
-                    alt="user photo"
+                    alt={`${pin.creator?.username ?? "User"} photo`}
                     loading="lazy"
                     src={pin.creator?.avater}
                     sizes="(max-width:20px)"
@@ -86,83 +78,90 @@ export default async function PinPage({
                 ) : (
                   <div className="w-full h-full bg-gray-200 rounded-full grid place-items-center">
                     <p className="text-xs font-bold">
-                      {pin.creator.name?.charAt(0)}
+                      {pin.creator?.name?.charAt(0) ?? "?"}
                     </p>
                   </div>
                 )}
               </div>
               <Link
-                href={`/profile/${pin.creator._id}`}
-                className="tex-sm text-gray-600 font-medium"
+                href={`/profile/${pin.creator?._id.toString() ?? ""}`}
+                className="text-sm text-gray-600 font-medium"
               >
-                {pin.creator.username}
+                {pin.creator?.username ?? "Unknown User"}
               </Link>
             </div>
           </div>
-          {session && session.user && pin.creator._id === currentUser && (
+
+          {session?.user && pin.creator?._id?.toString() === currentUser && (
             <div className="flex items-center gap-3">
               <Link href={`/pin/edit/${id}`}>
-                <Button variant={"outline"}>
+                <Button variant="outline">
                   <SquarePen className="size-4" />
                 </Button>
               </Link>
-              <DeletePin pinId={pin._id} />
+              <DeletePin pinId={pin._id.toString()} />
             </div>
           )}
         </div>
       </CardHeader>
+
       <CardContent>
         <div className="relative w-full aspect-[16/9]">
           <Image
             src={pin.photoUrl}
-            alt="Awesome Image"
+            alt={pin.caption ?? "Pin image"}
             fill
             className="object-cover rounded-lg"
             loading="lazy"
           />
         </div>
 
-        {session && session.user ? (
+        {session?.user ? (
           <div className="flex items-start justify-between gap-3 w-full mt-4">
             <div className="flex gap-1 items-start">
               {/* like and dislike btn */}
               <div className="flex items-center flex-col">
                 <UserLikeDislikeButton
-                  userId={currentUser}
-                  pinId={pin._id}
-                  likeInfo={pin.like.includes(currentUser)}
+                  userId={currentUser as string}
+                  pinId={pin._id.toString()}
+                  likeInfo={pin.like?.includes(currentUser)}
                 />
-                <p className="text-sm font-medium">{pin.like.length}</p>
+                <p className="text-sm font-medium">{pin.like?.length ?? 0}</p>
               </div>
 
               {/* Add pin comment section */}
-              <AddPinComment userId={currentUser} pinId={pin._id} />
+              <AddPinComment
+                userId={currentUser as string}
+                pinId={pin._id.toString()}
+              />
             </div>
 
             {/* bookmark btn */}
             <PinBookmark
-              userId={currentUser}
-              pinId={pin._id}
-              bookmarkInfo={currentUserDetails.bookmarks.includes(id)}
+              userId={currentUser as string}
+              pinId={pin._id.toString()}
+              bookmarkInfo={
+                currentUserDetails?.bookmarks?.includes(id) ?? false
+              }
             />
           </div>
         ) : (
-          <div className="mt-3 flex flex-row gap-x-1.5">
-            <AlertCircle color="red"/>{" "}
-            <h1 className="text-red-500 font-medium">You need to login to view more details of this post</h1>
+          <div className="mt-3 flex flex-row gap-x-1.5 items-center">
+            <AlertCircle color="red" />
+            <h1 className="text-red-500 font-medium">
+              You need to login to view more details of this post
+            </h1>
           </div>
         )}
       </CardContent>
-      {session && session.user && (
+
+      {session?.user && comments?.length > 0 && (
         <CardFooter className="w-full">
-          {/* pin comments */}
-          {comments.length > 0 && (
-            <PinComments
-              userId={currentUser}
-              comments={comments}
-              length={comments.length}
-            />
-          )}
+          <PinComments
+            userId={currentUser as string}
+            comments={comments}
+            length={comments.length}
+          />
         </CardFooter>
       )}
     </Card>

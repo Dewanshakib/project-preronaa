@@ -12,7 +12,7 @@ function PinCard({ pins }: { pins: IPinDetails[] }) {
         {pins && pins.length > 0 ? (
           pins.map((pin) => (
             <div className="" key={pin._id}>
-              <Link href={`/pin/${pin._id}`}>
+              <Link href={`/pin/${pin._id.toString()}`}>
                 <div className="w-full relative aspect-[16/9]">
                   <Image
                     fill
@@ -27,7 +27,9 @@ function PinCard({ pins }: { pins: IPinDetails[] }) {
             </div>
           ))
         ) : (
-          <h1 className="text-2xl md:text-4xl font-bold text-gray-700 mt-10">No pins added yet</h1>
+          <h1 className="text-2xl md:text-4xl font-bold text-gray-700 mt-10">
+            No pins added yet
+          </h1>
         )}
       </div>
     </div>

@@ -5,30 +5,6 @@ import { connectToDatabase } from "@/lib/db";
 import cloudinary from "@/lib/cloudinary";
 
 
-
-export async function GET(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
-    try {
-        const id = (await params).id
-
-        await connectToDatabase()
-
-    
-        const pins = await Pin.findById(id).populate({
-            path: 'creator',
-            select: ['-password','-follower','-bookmarks','-avaterId','-following'],
-        }).select('-photoId').lean()
-
-        return NextResponse.json(pins, { status: 200 })
-
-    } catch (error) {
-        if (error instanceof Error) {
-            return NextResponse.json({ error: error.message }, { status: 500 })
-        }
-        return NextResponse.json({ error: "Server error occured" }, { status: 500 })
-
-    }
-}
-
 export async function DELETE(request: NextRequest, { params }: { params: Promise<{ id: string }> }) {
 
     try {

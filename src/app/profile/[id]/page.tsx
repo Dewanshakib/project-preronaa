@@ -22,7 +22,7 @@ export default async function Profiles({
 }: {
   params: Promise<{ id: string }>;
 }) {
-  const userId = (await params).id;
+  const userId = (await params).id.toString();
 
   const session = await getServerSession(authOptions);
   const currentUser = session?.user?.id as string;
@@ -65,11 +65,13 @@ export default async function Profiles({
             </div>
           )}
 
-          <UserFollowUnfollow
-            userId={userId}
-            currentUser={currentUser}
-            followInfo={user.follower.includes(currentUser)}
-          />
+          {session && session.user && (
+            <UserFollowUnfollow
+              userId={userId}
+              currentUser={currentUser}
+              followInfo={user.follower.includes(currentUser)}
+            />
+          )}
         </div>
       </div>
 
