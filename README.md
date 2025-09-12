@@ -1,6 +1,6 @@
 # 🚀 Preronaa
 
-Preronaa is your aesthetic digital pinboard — think Pinterest with a chill twist. Save your favorite images or pins, drop captions, vibe with others through likes and comments, and keep your profile as fresh as your feed. Built with cutting-edge tech, full of useful features, and designed for modern creators.
+Preronaa is your aesthetic digital pinboard. Save your favorite images or pins, drop captions, vibe with others through likes and comments, and keep your profile as fresh as your feed. Built with cutting-edge tech, full of useful features, and designed for modern creators.
 
 ---
 
